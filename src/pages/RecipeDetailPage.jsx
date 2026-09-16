@@ -7,6 +7,7 @@ import InstructionsList from '../components/recipe/InstructionsList';
 
 import LazyImage from '../components/common/LazyImage';
 import SourceCitation from '../components/chat/SourceCitation';
+import { getDifficultyStyle } from '../utils/difficultyColor';
 
 export default function RecipeDetailPage() {
   const { id } = useParams();
@@ -25,18 +26,12 @@ export default function RecipeDetailPage() {
     }
   }, [id, recipe]);
 
-  if (loading) return <div className="flex justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mt-20"></div></div>;
-  if (error || !recipe) return <div className="text-red-500 text-center">{error || 'Recipe not found'}</div>;
-
-  const difficultyColors = {
-    easy: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900',
-    medium: 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200 dark:border-amber-900',
-    hard: 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
-  };
+  if (loading) return <div className="flex justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)] mt-20"></div></div>;
+  if (error || !recipe) return <div className="text-[var(--color-danger)] text-center p-4 bg-[var(--color-danger-soft)] rounded-2xl border border-[var(--color-danger)]/30">{error || 'Recipe not found'}</div>;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <button onClick={() => navigate(-1)} className="flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors">
+      <button onClick={() => navigate(-1)} className="flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors cursor-pointer">
         <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
       </button>
 
@@ -44,7 +39,7 @@ export default function RecipeDetailPage() {
         <LazyImage src={recipe.imageUrl} alt={recipe.title} aspectRatio="aspect-video" className="w-full max-h-80" />
         <div className="px-6 py-8 md:px-10 border-b border-[var(--color-border)] bg-[var(--color-surface-alt)]/40">
           <div className="flex flex-wrap gap-2 items-center mb-4">
-            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${difficultyColors[recipe.difficulty] || 'bg-[var(--color-surface-alt)] text-[var(--color-text-muted)]'}`}>
+            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${getDifficultyStyle(recipe.difficulty)}`}>
               {recipe.difficulty}
             </span>
             {recipe.recommendationScore && (

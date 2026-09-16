@@ -26,7 +26,7 @@ export default function RefrigeratorPage() {
     return matchSearch && matchCat;
   });
 
-  const gridRef = useStaggerList('> *', [filtered.length, category], {
+  const gridRef = useStaggerList(':scope > *', [filtered.length, category], {
     stagger: 0.04,
     y: 16,
     duration: 0.3,
@@ -106,7 +106,7 @@ export default function RefrigeratorPage() {
         </div>
       </div>
 
-      {error && <div className="text-rose-600 bg-rose-50 dark:bg-rose-950/40 p-4 rounded-2xl border border-rose-200 dark:border-rose-900 text-center">{error}</div>}
+      {error && <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 text-center text-sm">{error}</div>}
 
       {loading && !ingredients.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

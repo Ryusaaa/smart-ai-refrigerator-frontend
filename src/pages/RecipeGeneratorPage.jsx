@@ -11,7 +11,7 @@ export default function RecipeGeneratorPage() {
   const navigate = useNavigate();
 
   const containerRef = useEntranceAnimation({ y: 14, duration: 0.3 });
-  const recipeGridRef = useStaggerList('> *', [recipes.length], { stagger: 0.08, y: 18 });
+  const recipeGridRef = useStaggerList(':scope > *', [recipes.length], { stagger: 0.08, y: 18 });
 
   const handleGenerate = async (prefs) => {
     try {
@@ -35,7 +35,7 @@ export default function RecipeGeneratorPage() {
         
         <div className="lg:col-span-8">
           {error && (
-            <div className="text-rose-600 bg-rose-50 dark:bg-rose-950/40 p-4 rounded-2xl border border-rose-200 dark:border-rose-900 mb-6 text-center text-sm">
+            <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 mb-6 text-center text-sm">
               {error}
             </div>
           )}

@@ -1,4 +1,10 @@
-import { useState, useCallback, useRef } from 'react';
+// client/src/hooks/useChatStream.js
+// Enhanced SSE chat streaming hook with persistence and recipe event support per REDESIGN-INSTRUCTIONS.MD Sections 3.D & 3.E
+
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { chatApi } from '../services/chat.api';
+
+const SESSION_STORAGE_KEY = 'smartai_conversation_id';
 
 export function useChatStream() {
   const [messages, setMessages] = useState([]);
@@ -7,6 +13,29 @@ export function useChatStream() {
   const [statusMessage, setStatusMessage] = useState('');
   const [lastUserMessage, setLastUserMessage] = useState('');
   const abortControllerRef = useRef(null);
+
+  // Restore previous session from sessionStorage if user hasn't left the site
+  useEffect(() => {
+    const savedId = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (savedId) {
+      setConversationId(Number(savedId));
+      chatApi.getConversation(savedId)
+        .then(res => {
+          const payload = res?.data || res;
+          if (payload && Array.isArray(payload.messages) && payload.messages.length > 0) {
+            const mapped = payload.messages.map(m => ({
+              role: (m.role || '').toLowerCase() === 'user' ? 'user' : 'assistant',
+              content: m.content
+            }));
+            setMessages(mapped);
+          }
+        })
+        .catch(err => {
+          console.warn('Failed to restore conversation from session:', err);
+          sessionStorage.removeItem(SESSION_STORAGE_KEY);
+        });
+    }
+  }, []);
 
   const stopGenerating = useCallback(() => {
     if (abortControllerRef.current) {
@@ -96,9 +125,23 @@ export function useChatStream() {
                 }
                 return updated;
               });
+            } else if (eventType === 'recipe') {
+              // Section 3.E: Structured recipe suggestion event from backend
+              setMessages(prev => {
+                const updated = [...prev];
+                const last = updated[updated.length - 1];
+                if (last && last.role === 'assistant') {
+                  updated[updated.length - 1] = {
+                    ...last,
+                    recipeSuggestion: parsed
+                  };
+                }
+                return updated;
+              });
             } else if (eventType === 'done') {
-              if (parsed.conversationId && !conversationId) {
+              if (parsed.conversationId) {
                 setConversationId(parsed.conversationId);
+                sessionStorage.setItem(SESSION_STORAGE_KEY, parsed.conversationId);
               }
             } else if (eventType === 'error') {
               throw new Error(parsed.error || 'Terjadi kesalahan pada AI');
@@ -144,7 +187,6 @@ export function useChatStream() {
   const regenerateLast = useCallback(() => {
     if (!lastUserMessage || isStreaming) return;
     setMessages(prev => {
-      // Remove last assistant message
       if (prev.length > 0 && prev[prev.length - 1].role === 'assistant') {
         return prev.slice(0, -1);
       }
@@ -161,6 +203,7 @@ export function useChatStream() {
     setConversationId(null);
     setIsStreaming(false);
     setStatusMessage('');
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
   }, []);
 
   return {

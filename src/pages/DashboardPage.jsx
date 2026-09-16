@@ -55,7 +55,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (error) return <div className="text-rose-600 text-center p-5 bg-rose-50 dark:bg-rose-950/40 rounded-2xl border border-rose-200 dark:border-rose-900">{error}</div>;
+  if (error) return <div className="text-[var(--color-danger)] text-center p-4 bg-[var(--color-danger-soft)] rounded-2xl border border-[var(--color-danger)]/30 text-sm">{error}</div>;
   if (!data) return null;
 
   const stats = data.stats || {
@@ -68,27 +68,27 @@ export default function DashboardPage() {
   const categoryBreakdown = data.categoryBreakdown || [];
 
   return (
-    <div ref={containerRef} className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div ref={containerRef} className="space-y-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-1">
         <div>
-          <h1 className="text-3xl font-bold font-serif text-[var(--color-text)]">Kitchen Dashboard</h1>
-          <p className="text-[var(--color-text-muted)] text-sm mt-1">Overview of your smart refrigerator stock & freshness</p>
+          <h1 className="text-2xl font-bold font-serif text-[var(--color-text)]">Kitchen Dashboard</h1>
+          <p className="text-[var(--color-text-muted)] text-xs mt-0.5">Overview of smart refrigerator inventory, freshness, and status</p>
         </div>
         <div ref={btnRef} onPointerDown={handlePointerDown}>
-          <Link to="/recipes" className="inline-flex items-center space-x-2 bg-[var(--gradient-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm">
-            <Sparkles className="w-4 h-4" />
+          <Link to="/recipes" className="inline-flex items-center space-x-2 bg-[var(--gradient-primary)] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>Generate Recipe</span>
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard title="Total Ingredients" value={stats.totalIngredients} icon={Package} color="blue" />
         <StatsCard title="Expiring Soon" value={stats.expiringCount} icon={AlertTriangle} color={stats.expiringCount > 0 ? 'red' : 'green'} />
         <StatsCard title="Categories" value={stats.categoriesCount} icon={Grid3X3} color="yellow" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ExpiringCard ingredients={expiringItems} />
         <CategorySummary categories={categoryBreakdown} />
       </div>

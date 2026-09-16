@@ -62,6 +62,7 @@ export default function ChatWindow({
               role={msg.role}
               content={msg.content}
               isStreaming={msg.isStreaming}
+              recipeSuggestion={msg.recipeSuggestion}
             />
           ))}
 

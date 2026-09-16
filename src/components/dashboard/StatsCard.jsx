@@ -1,22 +1,22 @@
 export default function StatsCard({ title, value, subtitle, icon: Icon, color = 'green' }) {
   const colorMap = {
-    green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400',
-    yellow: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
-    red: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400',
-    blue: 'bg-[var(--color-primary-soft)] text-[var(--color-primary)]',
+    green: 'bg-[var(--color-success-soft)] text-[var(--color-success)] border border-[var(--color-success)]/20',
+    yellow: 'bg-[var(--color-warning-soft)] text-[var(--color-warning)] border border-[var(--color-warning)]/20',
+    red: 'bg-[var(--color-danger-soft)] text-[var(--color-danger)] border border-[var(--color-danger)]/20',
+    blue: 'bg-[var(--color-primary-soft)] text-[var(--color-primary)] border border-[var(--color-primary)]/20',
   };
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-2xl shadow-sm p-6 border border-[var(--color-border)] transition-colors">
+    <div className="bg-[var(--color-surface)] rounded-2xl shadow-sm p-4.5 border border-[var(--color-border)] transition-colors">
       <div className="flex items-center">
-        <div className={`p-3.5 rounded-xl ${colorMap[color] || colorMap.blue}`}>
-          <Icon className="w-6 h-6" />
+        <div className={`p-3 rounded-xl ${colorMap[color] || colorMap.blue} flex items-center justify-center flex-shrink-0`}>
+          <Icon className="w-5 h-5" />
         </div>
-        <div className="ml-4">
-          <h3 className="text-sm font-medium text-[var(--color-text-muted)]">{title}</h3>
-          <div className="flex items-baseline">
-            <p className="text-3xl font-bold font-serif text-[var(--color-text)]">{value}</p>
-            {subtitle && <p className="ml-2 text-sm text-[var(--color-text-muted)]">{subtitle}</p>}
+        <div className="ml-3.5 min-w-0 flex-1">
+          <h3 className="text-xs font-medium text-[var(--color-text-muted)] truncate">{title}</h3>
+          <div className="flex items-baseline mt-0.5">
+            <p className="text-2xl font-bold font-serif text-[var(--color-text)]">{value}</p>
+            {subtitle && <p className="ml-2 text-xs text-[var(--color-text-muted)] truncate">{subtitle}</p>}
           </div>
         </div>
       </div>

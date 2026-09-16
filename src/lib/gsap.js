@@ -3,9 +3,7 @@
 
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Flip } from 'gsap/Flip';
-import { Draggable } from 'gsap/Draggable';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Flip, Draggable, ScrollTrigger } from 'gsap/all';
 
 gsap.registerPlugin(useGSAP, Flip, Draggable, ScrollTrigger);
 

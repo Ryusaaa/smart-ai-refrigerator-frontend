@@ -1,6 +1,6 @@
 import { RefreshCw, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
-import { useChatStream } from '../hooks/useChatStream';
+import { useChat } from '../context/ChatContext';
 import ChatWindow from '../components/chat/ChatWindow';
 import ChatInput from '../components/chat/ChatInput';
 import { gsap } from '../lib/gsap';
@@ -14,7 +14,7 @@ export default function ChatPage() {
     stopGenerating,
     regenerateLast,
     clearConversation
-  } = useChatStream();
+  } = useChat();
 
   const refreshBtnRef = useRef(null);
 

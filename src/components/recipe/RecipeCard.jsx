@@ -3,14 +3,9 @@ import { Clock, BarChart2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { gsap, useGSAP } from '../../lib/gsap';
 import LazyImage from '../common/LazyImage';
+import { getDifficultyStyle } from '../../utils/difficultyColor';
 
 export default function RecipeCard({ recipe, onClick }) {
-  const difficultyColors = {
-    easy: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900',
-    medium: 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200 dark:border-amber-900',
-    hard: 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
-  };
-
   const id = recipe.id || recipe._id;
   const cardRef = useRef(null);
 
@@ -70,7 +65,7 @@ export default function RecipeCard({ recipe, onClick }) {
           <Clock className="w-3.5 h-3.5 mr-1 text-[var(--color-primary)]" />
           <span>{recipe.cookingTime} min</span>
         </div>
-        <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold uppercase ${difficultyColors[recipe.difficulty] || 'bg-[var(--color-surface-alt)] text-[var(--color-text-muted)]'}`}>
+        <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold uppercase ${getDifficultyStyle(recipe.difficulty)}`}>
           {recipe.difficulty}
         </span>
         {recipe.recommendationScore && (

@@ -12,7 +12,6 @@ export default function VoiceButton({ onTranscript }) {
     }
 
     if (isRecording) {
-      // It handles auto-stop or we could keep a ref to recognition to stop it
       setIsRecording(false);
       return;
     }
@@ -38,7 +37,7 @@ export default function VoiceButton({ onTranscript }) {
 
   if (!SpeechRecognition) {
     return (
-      <button disabled className="p-1.5 text-gray-300 cursor-not-allowed">
+      <button disabled className="p-1.5 text-[var(--color-text-muted)]/30 cursor-not-allowed" aria-label="Microphone not supported">
         <Mic className="w-5 h-5" />
       </button>
     );
@@ -48,7 +47,12 @@ export default function VoiceButton({ onTranscript }) {
     <button
       onClick={toggleRecording}
       type="button"
-      className={`p-1.5 rounded-full transition-colors ${isRecording ? 'bg-red-100 text-red-600 animate-pulse' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'}`}
+      aria-label={isRecording ? 'Stop recording voice' : 'Start recording voice'}
+      className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
+        isRecording
+          ? 'bg-[var(--color-danger-soft)] text-[var(--color-danger)] animate-pulse border border-[var(--color-danger)]/30'
+          : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-alt)]'
+      }`}
     >
       <Mic className="w-5 h-5" />
     </button>

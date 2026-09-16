@@ -4,8 +4,9 @@ import remarkGfm from 'remark-gfm';
 import { Sparkles, User } from 'lucide-react';
 import { gsap, useGSAP } from '../../lib/gsap';
 import StreamingCursor from './StreamingCursor';
+import RecipeSuggestionCard from './RecipeSuggestionCard';
 
-export default function MessageBubble({ role, content, isStreaming }) {
+export default function MessageBubble({ role, content, isStreaming, recipeSuggestion }) {
   const isUser = role === 'user';
   const bubbleRef = useRef(null);
   const contentRef = useRef(null);
@@ -83,6 +84,9 @@ export default function MessageBubble({ role, content, isStreaming }) {
             </ReactMarkdown>
             {isStreaming && <StreamingCursor />}
           </div>
+        )}
+        {!isUser && recipeSuggestion && (
+          <RecipeSuggestionCard recipe={recipeSuggestion} />
         )}
       </div>
 

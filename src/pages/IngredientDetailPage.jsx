@@ -50,8 +50,8 @@ export default function IngredientDetailPage() {
     }
   };
 
-  if (loading) return <div className="flex justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mt-20"></div></div>;
-  if (error || !ingredient) return <div className="text-red-500 text-center">{error || 'Not found'}</div>;
+  if (loading) return <div className="flex justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)] mt-20"></div></div>;
+  if (error || !ingredient) return <div className="text-[var(--color-danger)] text-center p-4 bg-[var(--color-danger-soft)] rounded-2xl border border-[var(--color-danger)]/30">{error || 'Not found'}</div>;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -69,10 +69,10 @@ export default function IngredientDetailPage() {
             <ExpiryBadge status={ingredient.expirationStatus || ingredient.expiryStatus} daysUntilExpiry={ingredient.daysUntilExpiry} />
           </div>
           <div className="flex gap-3">
-            <button onClick={() => setIsEditOpen(true)} className="flex items-center px-4 py-2 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] rounded-xl text-sm font-medium hover:bg-[var(--color-surface-alt)] transition-colors shadow-xs">
+            <button onClick={() => setIsEditOpen(true)} className="flex items-center px-4 py-2 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] rounded-xl text-sm font-medium hover:bg-[var(--color-surface-alt)] transition-colors shadow-xs cursor-pointer">
               <Edit2 className="w-4 h-4 mr-2 text-[var(--color-primary)]" /> Edit
             </button>
-            <button onClick={handleDelete} className="flex items-center px-4 py-2 bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 dark:border-rose-900 rounded-xl text-sm font-medium hover:bg-rose-100 transition-colors shadow-xs">
+            <button onClick={handleDelete} className="flex items-center px-4 py-2 bg-[var(--color-danger-soft)] text-[var(--color-danger)] border border-[var(--color-danger)]/30 rounded-xl text-sm font-medium hover:opacity-80 transition-opacity shadow-xs cursor-pointer">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </button>
           </div>

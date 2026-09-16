@@ -4,7 +4,7 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '../lib/gsap';
 
-export function useStaggerList(childSelector = '> *', deps = [], options = {}) {
+export function useStaggerList(childSelector = ':scope > *', deps = [], options = {}) {
   const containerRef = useRef(null);
   const {
     stagger = 0.05,
@@ -16,7 +16,17 @@ export function useStaggerList(childSelector = '> *', deps = [], options = {}) {
 
   useGSAP(() => {
     if (!containerRef.current) return;
-    const elements = containerRef.current.querySelectorAll(childSelector);
+    let elements = [];
+    try {
+      if (!childSelector || childSelector === ':scope > *' || childSelector === '> *') {
+        elements = Array.from(containerRef.current.children);
+      } else {
+        elements = containerRef.current.querySelectorAll(childSelector);
+      }
+    } catch (e) {
+      elements = Array.from(containerRef.current.children);
+    }
+
     if (!elements || elements.length === 0) return;
 
     gsap.from(elements, {
