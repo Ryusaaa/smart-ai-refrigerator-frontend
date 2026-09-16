@@ -1,6 +1,7 @@
 import { Clock, BarChart2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import LazyImage from '../common/LazyImage';
 
 export default function RecipeCard({ recipe, onClick }) {
   const difficultyColors = {
@@ -15,21 +16,24 @@ export default function RecipeCard({ recipe, onClick }) {
     <motion.div
       whileHover={{ y: -4, transition: { duration: 0.15 } }}
       whileTap={{ scale: 0.98 }}
-      className="bg-[var(--color-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] p-5 hover:shadow-elevated transition-all h-full flex flex-col justify-between cursor-pointer group"
+      className="bg-[var(--color-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] overflow-hidden hover:shadow-elevated transition-all h-full flex flex-col justify-between cursor-pointer group"
       onClick={onClick ? () => onClick(recipe) : undefined}
     >
       <div>
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-bold font-serif text-xl text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-2">
-            {recipe.title}
-          </h3>
+        <LazyImage src={recipe.imageUrl} alt={recipe.title} aspectRatio="aspect-video" className="w-full" />
+        <div className="p-5">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-bold font-serif text-xl text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-2">
+              {recipe.title}
+            </h3>
+          </div>
+          <p className="text-sm text-[var(--color-text-muted)] line-clamp-2 mb-2 leading-relaxed">
+            {recipe.description}
+          </p>
         </div>
-        <p className="text-sm text-[var(--color-text-muted)] line-clamp-2 mb-4 leading-relaxed">
-          {recipe.description}
-        </p>
       </div>
       
-      <div className="flex flex-wrap gap-2 items-center text-xs pt-3 border-t border-[var(--color-border)]/60">
+      <div className="px-5 pb-5 flex flex-wrap gap-2 items-center text-xs pt-3 border-t border-[var(--color-border)]/60">
         <div className="flex items-center text-[var(--color-text-muted)] bg-[var(--color-surface-alt)] px-2.5 py-1 rounded-lg font-medium">
           <Clock className="w-3.5 h-3.5 mr-1 text-[var(--color-primary)]" />
           <span>{recipe.cookingTime} min</span>
