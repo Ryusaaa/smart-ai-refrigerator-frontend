@@ -1,33 +1,73 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { motion } from 'framer-motion';
+import { Sparkles, User } from 'lucide-react';
+import { gsap, useGSAP } from '../../lib/gsap';
+import StreamingCursor from './StreamingCursor';
 
 export default function MessageBubble({ role, content, isStreaming }) {
   const isUser = role === 'user';
-  
+  const bubbleRef = useRef(null);
+  const contentRef = useRef(null);
+  const prevContentLengthRef = useRef(0);
+
+  // Entrance animation for bubble
+  useGSAP(() => {
+    if (!bubbleRef.current) return;
+    gsap.from(bubbleRef.current, {
+      opacity: 0,
+      y: 10,
+      scale: 0.98,
+      duration: 0.25,
+      ease: 'power2.out',
+    });
+  }, { scope: bubbleRef });
+
+  // Micro-entrance for new chunks when streaming
+  useEffect(() => {
+    if (isStreaming && contentRef.current && content) {
+      const currentLength = content.length;
+      if (currentLength > prevContentLengthRef.current) {
+        // Animate last added element in content container
+        const lastEl = contentRef.current.lastElementChild || contentRef.current;
+        gsap.fromTo(
+          lastEl,
+          { opacity: 0.8, y: 2 },
+          { opacity: 1, y: 0, duration: 0.2, ease: 'power1.out' }
+        );
+        prevContentLengthRef.current = currentLength;
+      }
+    } else if (!isStreaming) {
+      prevContentLengthRef.current = content?.length || 0;
+    }
+  }, [content, isStreaming]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.18 }}
-      className={`flex w-full mb-5 ${isUser ? 'justify-end' : 'justify-start'}`}
+    <div
+      ref={bubbleRef}
+      className={`flex w-full mb-5 items-start space-x-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
     >
+      {!isUser && (
+        <div className="w-8 h-8 rounded-xl bg-[var(--gradient-primary)] text-white flex items-center justify-center flex-shrink-0 shadow-xs mt-1">
+          <Sparkles className="w-4 h-4" />
+        </div>
+      )}
+
       <div
         className={`max-w-[85%] sm:max-w-[78%] rounded-3xl px-5 py-3.5 shadow-xs transition-colors ${
           isUser
-            ? 'bg-[var(--color-primary)] text-white rounded-br-xs'
+            ? 'bg-[var(--gradient-primary)] text-white rounded-br-xs'
             : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] rounded-bl-xs'
         }`}
       >
         {isUser ? (
           <p className="whitespace-pre-wrap leading-relaxed text-sm font-medium">{content}</p>
         ) : (
-          <div className={`prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed ${isStreaming ? 'streaming-cursor' : ''}`}>
+          <div ref={contentRef} className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                p: ({ children }) => <p className="mb-2.5 last:mb-0">{children}</p>,
+                p: ({ children }) => <p className="mb-2.5 last:mb-0 inline">{children}</p>,
                 ul: ({ children }) => <ul className="list-disc pl-4 mb-2.5 space-y-1">{children}</ul>,
                 ol: ({ children }) => <ol className="list-decimal pl-4 mb-2.5 space-y-1">{children}</ol>,
                 li: ({ children }) => <li className="text-[var(--color-text)]">{children}</li>,
@@ -41,9 +81,16 @@ export default function MessageBubble({ role, content, isStreaming }) {
             >
               {content || ''}
             </ReactMarkdown>
+            {isStreaming && <StreamingCursor />}
           </div>
         )}
       </div>
-    </motion.div>
+
+      {isUser && (
+        <div className="w-8 h-8 rounded-xl bg-[var(--color-surface-alt)] text-[var(--color-text-muted)] border border-[var(--color-border)] flex items-center justify-center flex-shrink-0 mt-1">
+          <User className="w-4 h-4" />
+        </div>
+      )}
+    </div>
   );
 }
