@@ -16,7 +16,8 @@ export function useChat() {
       if (data.conversationId && !conversationId) {
         setConversationId(data.conversationId);
       }
-      setMessages([...newMessages, { role: 'assistant', content: data.response }]);
+      const assistantReply = data.message || data.response || (typeof data === 'string' ? data : '');
+      setMessages([...newMessages, { role: 'assistant', content: assistantReply }]);
     } catch (err) {
       console.error(err);
       setMessages([...newMessages, { role: 'assistant', content: 'Sorry, I encountered an error.' }]);
