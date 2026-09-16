@@ -16,8 +16,9 @@ export default function RefrigeratorPage() {
     fetchIngredients();
   }, [fetchIngredients]);
 
-  const filtered = ingredients.filter(i => {
-    const matchSearch = i.name.toLowerCase().includes(search.toLowerCase());
+  const list = Array.isArray(ingredients) ? ingredients : [];
+  const filtered = list.filter(i => {
+    const matchSearch = (i.name || '').toLowerCase().includes(search.toLowerCase());
     const matchCat = category === 'All' || i.category === category;
     return matchSearch && matchCat;
   });

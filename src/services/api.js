@@ -8,7 +8,13 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const res = response.data;
+    if (res && typeof res === 'object' && 'data' in res && 'success' in res) {
+      return res.data;
+    }
+    return res;
+  },
   (error) => {
     return Promise.reject(error.response?.data || { message: error.message });
   }

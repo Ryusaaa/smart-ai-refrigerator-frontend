@@ -11,7 +11,7 @@ export function useIngredients() {
     setError(null);
     try {
       const data = await ingredientApi.getAll(params);
-      setIngredients(data);
+      setIngredients(Array.isArray(data) ? data : (data?.data && Array.isArray(data.data) ? data.data : []));
     } catch (err) {
       setError(err.message || 'Failed to fetch ingredients');
     } finally {
