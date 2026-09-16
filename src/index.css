@@ -7,7 +7,8 @@
 
 @layer base {
   body {
-    background-color: var(--color-bg);
+    background: var(--gradient-bg);
+    background-attachment: fixed;
     color: var(--color-text);
     font-family: var(--font-body);
     transition: background-color var(--transition-slow), color var(--transition-slow);
@@ -16,6 +17,23 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+  }
+
+  /* Remove the default browser focus ring (shows as a stray white/blue
+     halo on buttons and chips in the light theme) and replace it with a
+     theme-aware ring that only appears for keyboard navigation. */
+  *:focus {
+    outline: none;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 }
 

@@ -55,11 +55,12 @@ export default function MessageBubble({ role, content, isStreaming, recipeSugges
       )}
 
       <div
-        className={`max-w-[85%] sm:max-w-[78%] rounded-3xl px-5 py-3.5 shadow-xs transition-colors ${
+        className={`max-w-[85%] sm:max-w-[78%] rounded-3xl px-5 py-3.5 shadow-sm transition-colors ${
           isUser
-            ? 'bg-[var(--gradient-primary)] text-white rounded-br-xs'
-            : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] rounded-bl-xs'
+            ? 'text-white rounded-br-sm'
+            : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] rounded-bl-sm'
         }`}
+        style={isUser ? { background: 'var(--gradient-primary)' } : {}}
       >
         {isUser ? (
           <p className="whitespace-pre-wrap leading-relaxed text-sm font-medium">{content}</p>
@@ -91,7 +92,10 @@ export default function MessageBubble({ role, content, isStreaming, recipeSugges
       </div>
 
       {isUser && (
-        <div className="w-8 h-8 rounded-xl bg-[var(--color-surface-alt)] text-[var(--color-text-muted)] border border-[var(--color-border)] flex items-center justify-center flex-shrink-0 mt-1">
+        <div
+          className="w-8 h-8 rounded-xl text-white flex items-center justify-center flex-shrink-0 mt-1 shadow-sm"
+          style={{ background: 'var(--gradient-primary)' }}
+        >
           <User className="w-4 h-4" />
         </div>
       )}

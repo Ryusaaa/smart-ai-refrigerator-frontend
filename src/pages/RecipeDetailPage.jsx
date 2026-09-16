@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Clock, BarChart2 } from 'lucide-react';
+import { ArrowLeft, Clock, BarChart2, ChefHat, Users } from 'lucide-react';
 import { recipeApi } from '../services/recipe.api';
 import IngredientChecklist from '../components/recipe/IngredientChecklist';
 import InstructionsList from '../components/recipe/InstructionsList';

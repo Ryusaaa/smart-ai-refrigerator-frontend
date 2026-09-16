@@ -48,5 +48,10 @@ export function useRecipes() {
     }
   }, []);
 
-  return { recipes, recipe, loading, error, generateRecipes, fetchRecipes, fetchRecipe };
+  const setRecipesDirectly = useCallback((list) => {
+    setError(null);
+    setRecipes(Array.isArray(list) ? list : []);
+  }, []);
+
+  return { recipes, recipe, loading, error, generateRecipes, fetchRecipes, fetchRecipe, setRecipesDirectly };
 }

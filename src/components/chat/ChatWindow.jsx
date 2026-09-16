@@ -68,7 +68,7 @@ export default function ChatWindow({
 
           {statusMessage && <StatusIndicator status={statusMessage} />}
           
-          {isStreaming && !statusMessage && messages[messages.length - 1]?.content === '' && (
+          {isStreaming && !statusMessage && (messages.length === 0 || messages[messages.length - 1]?.content === '') && (
             <TypingIndicator />
           )}
 

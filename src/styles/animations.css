@@ -43,7 +43,7 @@
   background: linear-gradient(
     90deg,
     var(--color-surface-alt) 25%,
-    rgba(255, 255, 255, 0.4) 50%,
+    var(--color-surface-elevated) 50%,
     var(--color-surface-alt) 75%
   );
   background-size: 200% 100%;

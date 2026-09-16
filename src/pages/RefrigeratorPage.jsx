@@ -3,7 +3,6 @@ import { Plus, Search, Package } from 'lucide-react';
 import { useIngredients } from '../hooks/useIngredients';
 import IngredientCard from '../components/ingredient/IngredientCard';
 import IngredientModal from '../components/ingredient/IngredientModal';
-import { useStaggerList } from '../hooks/useStaggerList';
 import { gsap } from '../lib/gsap';
 
 const CATEGORIES = ['All', 'Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Protein', 'Grain', 'Spice', 'Sauce', 'Oil', 'Other'];
@@ -24,12 +23,6 @@ export default function RefrigeratorPage() {
     const matchSearch = (i.name || '').toLowerCase().includes(search.toLowerCase());
     const matchCat = category === 'All' || i.category === category;
     return matchSearch && matchCat;
-  });
-
-  const gridRef = useStaggerList(':scope > *', [filtered.length, category], {
-    stagger: 0.04,
-    y: 16,
-    duration: 0.3,
   });
 
   const handleSave = async (data) => {
@@ -70,7 +63,8 @@ export default function RefrigeratorPage() {
           ref={addBtnRef}
           onPointerDown={() => handlePointerDown(addBtnRef.current)}
           onClick={() => setModalState({ isOpen: true, ingredient: null })}
-          className="bg-[var(--gradient-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center space-x-2 cursor-pointer"
+          className="text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center space-x-2 cursor-pointer"
+          style={{ background: 'var(--gradient-primary)' }}
         >
           <Plus className="w-4 h-4" />
           <span>Add Ingredient</span>
@@ -96,9 +90,10 @@ export default function RefrigeratorPage() {
               onClick={() => setCategory(c)}
               className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
                 category === c
-                  ? 'bg-[var(--gradient-primary)] text-white shadow-xs'
-                  : 'bg-[var(--color-surface)] text-[var(--color-text-muted)] border border-[var(--color-border)] hover:bg-[var(--color-surface-alt)]'
+                  ? 'text-white shadow-sm'
+                  : 'bg-[var(--color-surface)] text-[var(--color-text-muted)] border border-[var(--color-border)] hover:bg-[var(--color-surface-alt)] hover:text-[var(--color-text)]'
               }`}
+              style={category === c ? { background: 'var(--gradient-primary)' } : {}}
             >
               {c}
             </button>
@@ -121,11 +116,12 @@ export default function RefrigeratorPage() {
           <p className="text-[var(--color-text-muted)] text-sm mt-1">Try adjusting your search filters or add a new ingredient to your inventory.</p>
         </div>
       ) : (
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map(ing => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filtered.map((ing, idx) => (
             <IngredientCard
               key={ing.id || ing._id}
               ingredient={ing}
+              index={idx}
               onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
               onDelete={handleDelete}
             />

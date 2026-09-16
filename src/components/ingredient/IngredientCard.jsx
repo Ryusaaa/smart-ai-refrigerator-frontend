@@ -5,19 +5,24 @@ import { Link } from 'react-router-dom';
 import { gsap, useGSAP } from '../../lib/gsap';
 import LazyImage from '../common/LazyImage';
 
-export default function IngredientCard({ ingredient, onEdit, onDelete }) {
+export default function IngredientCard({ ingredient, onEdit, onDelete, index = 0 }) {
   const id = ingredient.id || ingredient._id;
   const cardRef = useRef(null);
 
+  // Per-card entrance animation. Delay is derived from `index` so the grid
+  // still reads as a staggered reveal without relying on a container-level
+  // ":scope > *" query (that pattern was the source of the "Invalid scope"
+  // console loop on the Refrigerator page — see useStaggerList.js).
   useGSAP(() => {
     if (!cardRef.current) return;
     gsap.from(cardRef.current, {
       opacity: 0,
       y: 16,
       duration: 0.35,
+      delay: Math.min(index * 0.04, 0.4),
       ease: 'power2.out',
     });
-  }, { scope: cardRef });
+  }, { scope: cardRef, dependencies: [id] });
 
   const handleDeleteClick = () => {
     if (!cardRef.current) {

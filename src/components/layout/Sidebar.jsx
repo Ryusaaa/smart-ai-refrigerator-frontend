@@ -24,10 +24,10 @@ export default function Sidebar({ isOpen, onClose }) {
   ];
 
   const linkClass = ({ isActive }) =>
-    `flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
+    `flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group relative ${
       isActive
-        ? 'bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-text)]/20 shadow-xs'
-        : 'text-[var(--sidebar-text-muted)] hover:bg-white/[0.04] hover:text-[var(--sidebar-text)]'
+        ? 'bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)]'
+        : 'text-[var(--sidebar-text-muted)] hover:bg-white/[0.05] hover:text-[var(--sidebar-text)]'
     }`;
 
   const sidebarContent = (
@@ -36,7 +36,10 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Brand Header */}
         <div className="flex items-center justify-between pb-6 mb-6 border-b border-[var(--sidebar-border)]">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-[var(--gradient-primary)] flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <div
+              className="w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-sm flex-shrink-0"
+              style={{ background: 'var(--gradient-primary)' }}
+            >
               <Sparkles className="w-4.5 h-4.5" />
             </div>
             <div>
