@@ -33,35 +33,35 @@ export default function RecipeDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <button onClick={() => navigate(-1)} className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
-        <ArrowLeft className="w-4 h-4 mr-1" /> Back
+      <button onClick={() => navigate(-1)} className="flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors">
+        <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
       </button>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-8 md:px-10 border-b border-gray-100 bg-gray-50/50">
+      <div className="bg-[var(--color-surface)] rounded-3xl shadow-sm border border-[var(--color-border)] overflow-hidden transition-colors">
+        <div className="px-6 py-8 md:px-10 border-b border-[var(--color-border)] bg-[var(--color-surface-alt)]/40">
           <div className="flex flex-wrap gap-2 items-center mb-4">
-            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${difficultyColors[recipe.difficulty] || 'bg-gray-100 text-gray-800'}`}>
+            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${difficultyColors[recipe.difficulty] || 'bg-[var(--color-surface-alt)] text-[var(--color-text-muted)]'}`}>
               {recipe.difficulty}
             </span>
             {recipe.recommendationScore && (
-              <span className="flex items-center px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-xs font-bold uppercase tracking-wider">
-                <BarChart2 className="w-3 h-3 mr-1" /> {recipe.recommendationScore}% Match
+              <span className="flex items-center px-3 py-1 bg-[var(--color-primary)]/15 text-[var(--color-primary)] rounded-lg text-xs font-bold uppercase tracking-wider">
+                <BarChart2 className="w-3.5 h-3.5 mr-1" /> {recipe.recommendationScore}% Match
               </span>
             )}
-            <span className="flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Clock className="w-3 h-3 mr-1" /> {recipe.cookingTime} min
+            <span className="flex items-center px-3 py-1 bg-[var(--color-surface)] text-[var(--color-text-muted)] border border-[var(--color-border)] rounded-lg text-xs font-bold uppercase tracking-wider">
+              <Clock className="w-3.5 h-3.5 mr-1 text-[var(--color-primary)]" /> {recipe.cookingTime} min
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{recipe.title}</h1>
-          <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">{recipe.description}</p>
+          <h1 className="text-3xl md:text-4xl font-bold font-serif text-[var(--color-text)] mb-4">{recipe.title}</h1>
+          <p className="text-base md:text-lg text-[var(--color-text-muted)] leading-relaxed max-w-3xl">{recipe.description}</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-          <div className="p-6 md:p-10 col-span-1 bg-gray-50/30">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--color-border)]">
+          <div className="p-6 md:p-8 col-span-1 bg-[var(--color-surface-alt)]/20">
             <IngredientChecklist ingredients={recipe.ingredients} />
           </div>
-          <div className="p-6 md:p-10 col-span-2">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Instructions</h3>
+          <div className="p-6 md:p-8 col-span-2">
+            <h3 className="text-2xl font-bold font-serif text-[var(--color-text)] mb-6">Instructions</h3>
             <InstructionsList instructions={recipe.instructions} />
           </div>
         </div>

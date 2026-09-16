@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const CATEGORIES = ['Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Protein', 'Grain', 'Spice', 'Sauce', 'Oil', 'Other'];
 
@@ -28,39 +29,50 @@ export default function IngredientForm({ initialData, onSubmit, onCancel }) {
     onSubmit(formData);
   };
 
+  const inputClass = "mt-1.5 block w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-xs focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 sm:text-sm p-2.5 transition-colors outline-none";
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2 border" />
+        <label className="block text-sm font-medium text-[var(--color-text-muted)]">Ingredient Name</label>
+        <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={inputClass} placeholder="e.g. Fresh Tomatoes" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Category</label>
-        <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2 border">
+        <label className="block text-sm font-medium text-[var(--color-text-muted)]">Category</label>
+        <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className={inputClass}>
           {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Quantity</label>
-          <input required type="number" step="0.01" min="0" value={formData.quantity} onChange={e => setFormData({...formData, quantity: parseFloat(e.target.value)})} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2 border" />
+          <label className="block text-sm font-medium text-[var(--color-text-muted)]">Quantity</label>
+          <input required type="number" step="0.01" min="0" value={formData.quantity} onChange={e => setFormData({...formData, quantity: parseFloat(e.target.value)})} className={inputClass} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Unit</label>
-          <input required type="text" value={formData.unit} onChange={e => setFormData({...formData, unit: e.target.value})} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2 border" placeholder="e.g. kg, lbs, pcs" />
+          <label className="block text-sm font-medium text-[var(--color-text-muted)]">Unit</label>
+          <input required type="text" value={formData.unit} onChange={e => setFormData({...formData, unit: e.target.value})} className={inputClass} placeholder="kg, pcs, ml" />
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Expiry Date (Optional)</label>
-        <input type="date" value={formData.expiryDate} onChange={e => setFormData({...formData, expiryDate: e.target.value})} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2 border" />
+        <label className="block text-sm font-medium text-[var(--color-text-muted)]">Expiry Date (Optional)</label>
+        <input type="date" value={formData.expiryDate} onChange={e => setFormData({...formData, expiryDate: e.target.value})} className={inputClass} />
       </div>
-      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-        <button type="button" onClick={onCancel} className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+      <div className="flex justify-end space-x-3 pt-5 border-t border-[var(--color-border)]/60">
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-muted)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-alt)] transition-colors"
+        >
           Cancel
-        </button>
-        <button type="submit" className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none">
-          Save
-        </button>
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          type="submit"
+          className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[var(--color-primary)] hover:opacity-90 shadow-sm transition-all"
+        >
+          Save Ingredient
+        </motion.button>
       </div>
     </form>
   );
