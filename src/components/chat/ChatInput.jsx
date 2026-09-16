@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 import VoiceButton from './VoiceButton';
 
 export default function ChatInput({ onSend, loading }) {
@@ -32,30 +33,32 @@ export default function ChatInput({ onSend, loading }) {
   };
 
   return (
-    <div className="bg-white border-t border-gray-200 p-4">
+    <div className="bg-[var(--color-surface)] border-t border-[var(--color-border)] p-4 transition-colors">
       <div className="max-w-4xl mx-auto flex items-end space-x-2 relative">
-        <div className="flex-1 bg-gray-50 border border-gray-200 rounded-2xl flex items-end relative shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 transition-all">
+        <div className="flex-1 bg-[var(--color-surface-alt)] border border-[var(--color-border)] rounded-2xl flex items-end relative shadow-2xs focus-within:border-[var(--color-primary)] focus-within:ring-2 focus-within:ring-[var(--color-primary)]/20 transition-all">
           <textarea
             ref={textareaRef}
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about your fridge inventory, recipes..."
-            className="w-full max-h-32 bg-transparent border-0 focus:ring-0 resize-none py-3 pl-4 pr-12 text-sm leading-relaxed"
+            placeholder="Tanyakan resep dari bahan kulkas, info kedaluwarsa..."
+            className="w-full max-h-32 bg-transparent border-0 focus:outline-none focus:ring-0 resize-none py-3.5 pl-4 pr-12 text-sm leading-relaxed text-[var(--color-text)] placeholder-[var(--color-text-muted)]"
             rows={1}
             disabled={loading}
           />
-          <div className="absolute right-2 bottom-2">
+          <div className="absolute right-2.5 bottom-2.5">
             <VoiceButton onTranscript={(t) => setText(prev => prev ? `${prev} ${t}` : t)} />
           </div>
         </div>
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.92 }}
           onClick={handleSend}
           disabled={!text.trim() || loading}
-          className="bg-primary-600 text-white p-3 rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 shadow-sm transition-colors"
+          className="bg-[var(--color-primary)] text-white p-3.5 rounded-2xl hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 shadow-sm transition-all flex items-center justify-center"
         >
-          <Send className="w-5 h-5" />
-        </button>
+          <Send className="w-4 h-4" />
+        </motion.button>
       </div>
     </div>
   );
