@@ -3,7 +3,7 @@ export default function StatsCard({ title, value, subtitle, icon: Icon, color = 
     green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400',
     yellow: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
     red: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400',
-    blue: 'bg-orange-100 text-[var(--color-primary)] dark:bg-orange-950/60 dark:text-[var(--color-primary)]',
+    blue: 'bg-[var(--color-primary-soft)] text-[var(--color-primary)]',
   };
 
   return (

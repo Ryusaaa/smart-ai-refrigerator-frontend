@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Package, ChefHat, MessageCircle, Settings, Home, Menu, X } from 'lucide-react';
+import { Package, ChefHat, MessageCircle, Settings, Home, Menu, X, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import ThemeToggle from '../common/ThemeToggle';
 
@@ -17,7 +17,7 @@ export default function Navbar() {
   const getLinkClass = ({ isActive }) =>
     `flex items-center space-x-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${
       isActive
-        ? 'bg-[var(--color-primary)] text-white shadow-sm'
+        ? 'bg-[var(--gradient-primary)] text-white shadow-sm'
         : 'text-[var(--color-text-muted)] hover:bg-[var(--color-surface-alt)] hover:text-[var(--color-text)]'
     }`;
 
@@ -25,9 +25,11 @@ export default function Navbar() {
     <nav className="bg-[var(--color-surface)] border-b border-[var(--color-border)] sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl">🧊</span>
-            <span className="font-bold text-xl text-[var(--color-primary)] font-serif">SMARTAI Kitchen</span>
+          <div className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[var(--gradient-primary)] flex items-center justify-center text-white shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <span className="font-bold text-xl bg-[var(--gradient-text)] bg-clip-text text-transparent">SMARTAI Kitchen</span>
           </div>
           
           <div className="hidden md:flex items-center space-x-2">

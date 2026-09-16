@@ -1,25 +1,45 @@
-:root {
-  /* Warm/cozy default theme */
-  --color-bg: #FBF3EA;
+/* ============================================================
+   SMARTAI Refrigerator — Midnight Gradient Theme (v3)
+   Replaced from orange/terracotta (v2) per update_v3.md Section 1
+   ============================================================ */
+
+/* Light theme (secondary variant) */
+:root,
+[data-theme="light"] {
+  --color-bg: #F5F5FB;
   --color-surface: #FFFFFF;
-  --color-surface-alt: #F5E9DC;
-  --color-primary: #E07A3F;      /* terracotta/pumpkin */
-  --color-primary-hover: #C4632D;
-  --color-accent: #7A9E7E;       /* sage green */
-  --color-warning: #D9A441;      /* expiry soon */
-  --color-danger: #C4453B;       /* expired */
-  --color-text: #2B2118;
-  --color-text-muted: #6B5D4F;
-  --color-border: #E5D5C3;
+  --color-surface-alt: #ECEBFA;
+  --color-surface-elevated: rgba(255, 255, 255, 0.75);
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --color-primary: #5B5FEF;
+  --color-primary-hover: #4A4EDC;
+  --color-secondary: #8B5CF6;
+  --color-primary-soft: rgba(91, 95, 239, 0.12);
 
-  --shadow-soft: 0 4px 16px rgba(43, 33, 24, 0.08);
-  --shadow-elevated: 0 8px 28px rgba(43, 33, 24, 0.14);
+  --gradient-primary: linear-gradient(135deg, #5B5FEF 0%, #8B5CF6 50%, #C084FC 100%);
+  --gradient-primary-soft: linear-gradient(135deg,
+    rgba(91, 95, 239, 0.14) 0%,
+    rgba(139, 92, 246, 0.14) 50%,
+    rgba(192, 132, 252, 0.14) 100%);
+  --gradient-text: linear-gradient(90deg, #5B5FEF 0%, #8B5CF6 50%, #C084FC 100%);
 
-  --font-heading: "Fraunces", Georgia, serif;
+  --color-success: #2FAE72;
+  --color-warning: #D99A2B;
+  --color-danger: #D9453B;
+
+  --color-text: #171725;
+  --color-text-muted: #63637D;
+  --color-border: #DEDCF2;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 4px 16px rgba(23, 23, 37, 0.08);
+  --shadow-glow-primary: 0 0 24px rgba(91, 95, 239, 0.3);
+
+  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -27,18 +47,48 @@
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Dark theme — default / primary (Midnight Gradient, blue-black-purple) */
 [data-theme="dark"] {
-  --color-bg: #1C1712;
-  --color-surface: #26201A;
-  --color-surface-alt: #2F281F;
-  --color-primary: #F0955A;
-  --color-primary-hover: #F5AB79;
-  --color-accent: #8FBB93;
-  --color-warning: #E3B04B;
-  --color-danger: #D4544A;
-  --color-text: #F2E9DD;
-  --color-text-muted: #B8A990;
-  --color-border: #3A3226;
-  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --shadow-elevated: 0 8px 28px rgba(0, 0, 0, 0.45);
+  /* Base — near-black with blue-purple undertone, not pure black */
+  --color-bg: #0A0A12;
+  --color-surface: #14141F;
+  --color-surface-alt: #1B1B2B;
+  --color-surface-elevated: rgba(33, 33, 53, 0.67);
+
+  /* Primary accent — gradient blue → purple */
+  --color-primary: #6C7BFF;
+  --color-primary-hover: #8A96FF;
+  --color-secondary: #A76CFF;
+  --color-primary-soft: rgba(108, 123, 255, 0.15);
+
+  --gradient-primary: linear-gradient(135deg, #4F5BFF 0%, #8A5CFF 50%, #C86CFF 100%);
+  --gradient-primary-soft: linear-gradient(135deg,
+    rgba(79, 91, 255, 0.16) 0%,
+    rgba(138, 92, 255, 0.16) 50%,
+    rgba(200, 108, 255, 0.16) 100%);
+  --gradient-text: linear-gradient(90deg, #7C8CFF 0%, #B57CFF 50%, #E08CFF 100%);
+
+  /* Status — kept solid for clarity (green=safe, yellow=soon, red=critical) */
+  --color-success: #4FD196;
+  --color-warning: #F2B84B;
+  --color-danger: #F2554B;
+
+  --color-text: #F1F0F8;
+  --color-text-muted: #9C9AB5;
+  --color-border: #2A2A40;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow-primary: 0 0 24px rgba(138, 92, 255, 0.35);
+
+  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
