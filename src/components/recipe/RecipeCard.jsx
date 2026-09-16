@@ -1,6 +1,7 @@
+import React, { useRef } from 'react';
 import { Clock, BarChart2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { gsap, useGSAP } from '../../lib/gsap';
 import LazyImage from '../common/LazyImage';
 
 export default function RecipeCard({ recipe, onClick }) {
@@ -11,12 +12,43 @@ export default function RecipeCard({ recipe, onClick }) {
   };
 
   const id = recipe.id || recipe._id;
+  const cardRef = useRef(null);
+
+  useGSAP(() => {
+    if (!cardRef.current) return;
+    gsap.from(cardRef.current, {
+      opacity: 0,
+      y: 18,
+      duration: 0.35,
+      ease: 'power2.out',
+    });
+  }, { scope: cardRef });
+
+  const handlePointerDown = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, { scale: 0.98, duration: 0.1, yoyo: true, repeat: 1 });
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, { y: -4, duration: 0.2, ease: 'power1.out' });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, { y: 0, duration: 0.2, ease: 'power1.out' });
+    }
+  };
 
   const cardBody = (
-    <motion.div
-      whileHover={{ y: -4, transition: { duration: 0.15 } }}
-      whileTap={{ scale: 0.98 }}
-      className="bg-[var(--color-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] overflow-hidden hover:shadow-elevated transition-all h-full flex flex-col justify-between cursor-pointer group"
+    <div
+      ref={cardRef}
+      onPointerDown={handlePointerDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="bg-[var(--color-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] overflow-hidden hover:shadow-elevated transition-shadow h-full flex flex-col justify-between cursor-pointer group"
       onClick={onClick ? () => onClick(recipe) : undefined}
     >
       <div>
@@ -42,13 +74,13 @@ export default function RecipeCard({ recipe, onClick }) {
           {recipe.difficulty}
         </span>
         {recipe.recommendationScore && (
-          <div className="flex items-center text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2.5 py-1 rounded-lg font-bold">
+          <div className="flex items-center text-[var(--color-primary)] bg-[var(--color-primary-soft)] px-2.5 py-1 rounded-lg font-bold">
             <BarChart2 className="w-3.5 h-3.5 mr-1" />
             <span>{recipe.recommendationScore}% Match</span>
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 
   if (onClick) return cardBody;

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Plus, Search, Package } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useIngredients } from '../hooks/useIngredients';
 import IngredientCard from '../components/ingredient/IngredientCard';
 import IngredientModal from '../components/ingredient/IngredientModal';
+import { useStaggerList } from '../hooks/useStaggerList';
+import { gsap } from '../lib/gsap';
 
 const CATEGORIES = ['All', 'Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Protein', 'Grain', 'Spice', 'Sauce', 'Oil', 'Other'];
 
@@ -12,6 +13,7 @@ export default function RefrigeratorPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [modalState, setModalState] = useState({ isOpen: false, ingredient: null });
+  const addBtnRef = useRef(null);
 
   useEffect(() => {
     fetchIngredients();
@@ -22,6 +24,12 @@ export default function RefrigeratorPage() {
     const matchSearch = (i.name || '').toLowerCase().includes(search.toLowerCase());
     const matchCat = category === 'All' || i.category === category;
     return matchSearch && matchCat;
+  });
+
+  const gridRef = useStaggerList('> *', [filtered.length, category], {
+    stagger: 0.04,
+    y: 16,
+    duration: 0.3,
   });
 
   const handleSave = async (data) => {
@@ -47,6 +55,10 @@ export default function RefrigeratorPage() {
     }
   };
 
+  const handlePointerDown = (el) => {
+    if (el) gsap.to(el, { scale: 0.96, duration: 0.1, yoyo: true, repeat: 1 });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -54,15 +66,15 @@ export default function RefrigeratorPage() {
           <h1 className="text-3xl font-bold font-serif text-[var(--color-text)]">Refrigerator Stock</h1>
           <p className="text-[var(--color-text-muted)] text-sm mt-1">Track and manage ingredients stored in your fridge</p>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
+          ref={addBtnRef}
+          onPointerDown={() => handlePointerDown(addBtnRef.current)}
           onClick={() => setModalState({ isOpen: true, ingredient: null })}
-          className="bg-[var(--color-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center space-x-2"
+          className="bg-[var(--gradient-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center space-x-2 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add Ingredient</span>
-        </motion.button>
+        </button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
@@ -78,18 +90,18 @@ export default function RefrigeratorPage() {
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {CATEGORIES.map(c => (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
+            <button
+              onPointerDown={(e) => handlePointerDown(e.currentTarget)}
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
                 category === c
-                  ? 'bg-[var(--color-primary)] text-white shadow-xs'
+                  ? 'bg-[var(--gradient-primary)] text-white shadow-xs'
                   : 'bg-[var(--color-surface)] text-[var(--color-text-muted)] border border-[var(--color-border)] hover:bg-[var(--color-surface-alt)]'
               }`}
             >
               {c}
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>
@@ -109,21 +121,24 @@ export default function RefrigeratorPage() {
           <p className="text-[var(--color-text-muted)] text-sm mt-1">Try adjusting your search filters or add a new ingredient to your inventory.</p>
         </div>
       ) : (
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <AnimatePresence mode="popLayout">
-            {filtered.map(ing => (
-              <IngredientCard
-                key={ing.id || ing._id}
-                ingredient={ing}
-                onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
-                onDelete={handleDelete}
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filtered.map(ing => (
+            <IngredientCard
+              key={ing.id || ing._id}
+              ingredient={ing}
+              onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
       )}
 
-      <IngredientModal isOpen={modalState.isOpen} onClose={() => setModalState({ isOpen: false, ingredient: null })} ingredient={modalState.ingredient} onSuccess={handleSave} />
+      <IngredientModal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ isOpen: false, ingredient: null })}
+        ingredient={modalState.ingredient}
+        onSuccess={handleSave}
+      />
     </div>
   );
 }

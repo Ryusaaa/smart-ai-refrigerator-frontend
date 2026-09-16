@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Package, AlertTriangle, Grid3X3, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { dashboardApi } from '../services/dashboard.api';
 import StatsCard from '../components/dashboard/StatsCard';
 import ExpiringCard from '../components/dashboard/ExpiringCard';
 import CategorySummary from '../components/dashboard/CategorySummary';
+import { useEntranceAnimation } from '../hooks/useEntranceAnimation';
+import { gsap } from '../lib/gsap';
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const btnRef = useRef(null);
+
+  const containerRef = useEntranceAnimation({ y: 16, duration: 0.35 });
 
   useEffect(() => {
     dashboardApi.get()
@@ -21,6 +25,12 @@ export default function DashboardPage() {
       .catch(err => setError(err.message || 'Failed to load dashboard'))
       .finally(() => setLoading(false));
   }, []);
+
+  const handlePointerDown = () => {
+    if (btnRef.current) {
+      gsap.to(btnRef.current, { scale: 0.96, duration: 0.1, yoyo: true, repeat: 1 });
+    }
+  };
 
   if (loading) {
     return (
@@ -58,23 +68,18 @@ export default function DashboardPage() {
   const categoryBreakdown = data.categoryBreakdown || [];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className="space-y-6"
-    >
+    <div ref={containerRef} className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold font-serif text-[var(--color-text)]">Kitchen Dashboard</h1>
           <p className="text-[var(--color-text-muted)] text-sm mt-1">Overview of your smart refrigerator stock & freshness</p>
         </div>
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <Link to="/recipes" className="inline-flex items-center space-x-2 bg-[var(--color-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm">
+        <div ref={btnRef} onPointerDown={handlePointerDown}>
+          <Link to="/recipes" className="inline-flex items-center space-x-2 bg-[var(--gradient-primary)] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm">
             <Sparkles className="w-4 h-4" />
             <span>Generate Recipe</span>
           </Link>
-        </motion.div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -87,6 +92,6 @@ export default function DashboardPage() {
         <ExpiringCard ingredients={expiringItems} />
         <CategorySummary categories={categoryBreakdown} />
       </div>
-    </motion.div>
+    </div>
   );
 }

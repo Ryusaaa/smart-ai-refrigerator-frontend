@@ -4,6 +4,7 @@ import { ArrowLeft, Edit2, Trash2, Calendar, Tag, Database } from 'lucide-react'
 import { ingredientApi } from '../services/ingredient.api';
 import ExpiryBadge from '../components/ingredient/ExpiryBadge';
 import IngredientModal from '../components/ingredient/IngredientModal';
+import LazyImage from '../components/common/LazyImage';
 
 export default function IngredientDetailPage() {
   const { id } = useParams();
@@ -54,11 +55,14 @@ export default function IngredientDetailPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <button onClick={() => navigate('/refrigerator')} className="flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors">
+      <button onClick={() => navigate('/refrigerator')} className="flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors cursor-pointer">
         <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to Refrigerator
       </button>
 
       <div className="bg-[var(--color-surface)] rounded-3xl shadow-sm border border-[var(--color-border)] overflow-hidden transition-colors">
+        {ingredient.imageUrl && (
+          <LazyImage src={ingredient.imageUrl} alt={ingredient.name} aspectRatio="aspect-video" className="w-full max-h-72" />
+        )}
         <div className="px-6 py-8 md:px-8 border-b border-[var(--color-border)] bg-[var(--color-surface-alt)]/30">
           <div className="flex justify-between items-start mb-4">
             <h1 className="text-3xl font-bold font-serif text-[var(--color-text)]">{ingredient.name}</h1>

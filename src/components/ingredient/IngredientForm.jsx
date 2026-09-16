@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { gsap } from '../../lib/gsap';
 
 const CATEGORIES = ['Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Protein', 'Grain', 'Spice', 'Sauce', 'Oil', 'Other'];
 
@@ -11,6 +11,9 @@ export default function IngredientForm({ initialData, onSubmit, onCancel }) {
     unit: 'pcs',
     expiryDate: ''
   });
+
+  const cancelBtnRef = useRef(null);
+  const saveBtnRef = useRef(null);
 
   useEffect(() => {
     if (initialData) {
@@ -27,6 +30,10 @@ export default function IngredientForm({ initialData, onSubmit, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
+  };
+
+  const handlePointerDown = (el) => {
+    if (el) gsap.to(el, { scale: 0.96, duration: 0.1, yoyo: true, repeat: 1 });
   };
 
   const inputClass = "mt-1.5 block w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-xs focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 sm:text-sm p-2.5 transition-colors outline-none";
@@ -58,21 +65,23 @@ export default function IngredientForm({ initialData, onSubmit, onCancel }) {
         <input type="date" value={formData.expiryDate} onChange={e => setFormData({...formData, expiryDate: e.target.value})} className={inputClass} />
       </div>
       <div className="flex justify-end space-x-3 pt-5 border-t border-[var(--color-border)]/60">
-        <motion.button
-          whileTap={{ scale: 0.97 }}
+        <button
+          ref={cancelBtnRef}
+          onPointerDown={() => handlePointerDown(cancelBtnRef.current)}
           type="button"
           onClick={onCancel}
-          className="px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-muted)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-alt)] transition-colors"
+          className="px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-muted)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-alt)] transition-colors cursor-pointer"
         >
           Cancel
-        </motion.button>
-        <motion.button
-          whileTap={{ scale: 0.97 }}
+        </button>
+        <button
+          ref={saveBtnRef}
+          onPointerDown={() => handlePointerDown(saveBtnRef.current)}
           type="submit"
-          className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[var(--color-primary)] hover:opacity-90 shadow-sm transition-all"
+          className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[var(--gradient-primary)] hover:opacity-90 shadow-sm transition-all cursor-pointer"
         >
           Save Ingredient
-        </motion.button>
+        </button>
       </div>
     </form>
   );
