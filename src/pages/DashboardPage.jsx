@@ -12,12 +12,27 @@ export default function DashboardPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    dashboardApi.get().then(setData).catch(err => setError(err.message)).finally(() => setLoading(false));
+    dashboardApi.get()
+      .then(res => {
+        const payload = res?.data || res;
+        setData(payload);
+      })
+      .catch(err => setError(err.message || 'Failed to load dashboard'))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>;
   if (error) return <div className="text-red-500 text-center p-4 bg-red-50 rounded-xl">{error}</div>;
   if (!data) return null;
+
+  const stats = data.stats || {
+    totalIngredients: data.totalIngredients || 0,
+    expiringCount: data.expiringCount || 0,
+    categoriesCount: data.totalCategories || 0,
+  };
+
+  const expiringItems = data.expiringItems || [];
+  const categoryBreakdown = data.categoryBreakdown || [];
 
   return (
     <div className="space-y-6">
@@ -32,14 +47,14 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatsCard title="Total Ingredients" value={data.stats.totalIngredients} icon={Package} color="blue" />
-        <StatsCard title="Expiring Soon" value={data.stats.expiringCount} icon={AlertTriangle} color={data.stats.expiringCount > 0 ? 'red' : 'green'} />
-        <StatsCard title="Categories" value={data.stats.categoriesCount} icon={Grid3X3} color="yellow" />
+        <StatsCard title="Total Ingredients" value={stats.totalIngredients} icon={Package} color="blue" />
+        <StatsCard title="Expiring Soon" value={stats.expiringCount} icon={AlertTriangle} color={stats.expiringCount > 0 ? 'red' : 'green'} />
+        <StatsCard title="Categories" value={stats.categoriesCount} icon={Grid3X3} color="yellow" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ExpiringCard ingredients={data.expiringItems} />
-        <CategorySummary categories={data.categoryBreakdown} />
+        <ExpiringCard ingredients={expiringItems} />
+        <CategorySummary categories={categoryBreakdown} />
       </div>
     </div>
   );
