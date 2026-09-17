@@ -9,6 +9,8 @@ import LazyImage from '../components/common/LazyImage';
 import SourceCitation from '../components/chat/SourceCitation';
 import { getDifficultyStyle } from '../utils/difficultyColor';
 
+import { saveViewedRecipe } from '../utils/recipeHistory';
+
 export default function RecipeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,9 +22,14 @@ export default function RecipeDetailPage() {
   useEffect(() => {
     if (!recipe) {
       recipeApi.getById(id)
-        .then(data => setRecipe(data))
+        .then(data => {
+          setRecipe(data);
+          if (data) saveViewedRecipe(data);
+        })
         .catch(err => setError(err.message))
         .finally(() => setLoading(false));
+    } else {
+      saveViewedRecipe(recipe);
     }
   }, [id, recipe]);
 

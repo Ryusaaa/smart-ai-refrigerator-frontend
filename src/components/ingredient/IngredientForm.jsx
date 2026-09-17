@@ -78,7 +78,8 @@ export default function IngredientForm({ initialData, onSubmit, onCancel }) {
           ref={saveBtnRef}
           onPointerDown={() => handlePointerDown(saveBtnRef.current)}
           type="submit"
-          className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[var(--gradient-primary)] hover:opacity-90 shadow-sm transition-all cursor-pointer"
+          className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 shadow-sm transition-all cursor-pointer"
+          style={{ background: 'var(--gradient-primary)' }}
         >
           Save Ingredient
         </button>

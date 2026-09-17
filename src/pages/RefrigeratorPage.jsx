@@ -3,6 +3,7 @@ import { Plus, Search, Package } from 'lucide-react';
 import { useIngredients } from '../hooks/useIngredients';
 import IngredientCard from '../components/ingredient/IngredientCard';
 import IngredientModal from '../components/ingredient/IngredientModal';
+import ScrollReveal from '../components/common/ScrollReveal';
 import { gsap } from '../lib/gsap';
 
 const CATEGORIES = ['All', 'Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Protein', 'Grain', 'Spice', 'Sauce', 'Oil', 'Other'];
@@ -118,13 +119,20 @@ export default function RefrigeratorPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtered.map((ing, idx) => (
-            <IngredientCard
+            <ScrollReveal
               key={ing.id || ing._id}
-              ingredient={ing}
-              index={idx}
-              onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
-              onDelete={handleDelete}
-            />
+              delay={(idx % 4) * 0.05}
+              y={24}
+              scale={0.96}
+              blur={5}
+            >
+              <IngredientCard
+                ingredient={ing}
+                index={idx}
+                onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
+                onDelete={handleDelete}
+              />
+            </ScrollReveal>
           ))}
         </div>
       )}

@@ -94,7 +94,8 @@ export default function PreferencesForm({ onGenerate, loading }) {
         onPointerDown={handlePointerDown}
         type="submit"
         disabled={loading}
-        className="mt-8 w-full flex items-center justify-center space-x-2 py-3.5 px-4 rounded-xl shadow-sm text-sm font-semibold text-white bg-[var(--gradient-primary)] hover:opacity-90 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer"
+        className="mt-8 w-full flex items-center justify-center space-x-2 py-3.5 px-4 rounded-xl shadow-sm text-sm font-semibold text-white hover:opacity-90 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer"
+        style={{ background: 'var(--gradient-primary)' }}
       >
         <Sparkles className="w-4 h-4" />
         <span>{loading ? 'Crafting Recipes with AI...' : 'Generate AI Recipes'}</span>

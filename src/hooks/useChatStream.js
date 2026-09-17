@@ -3,6 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { chatApi } from '../services/chat.api';
+import { saveViewedRecipe } from '../utils/recipeHistory';
 
 const SESSION_STORAGE_KEY = 'smartai_conversation_id';
 
@@ -127,6 +128,7 @@ export function useChatStream() {
               });
             } else if (eventType === 'recipe') {
               // Section 3.E: Structured recipe suggestion event from backend
+              saveViewedRecipe(parsed);
               setMessages(prev => {
                 const updated = [...prev];
                 const last = updated[updated.length - 1];

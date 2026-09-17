@@ -93,7 +93,8 @@ export default function ChatInput({ onSend, loading }) {
           onPointerDown={handlePointerDown}
           onClick={handleSend}
           disabled={!text.trim() || loading}
-          className="bg-[var(--gradient-primary)] text-white p-3.5 rounded-2xl hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 shadow-sm transition-all flex items-center justify-center cursor-pointer"
+          className="text-white p-3.5 rounded-2xl hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 shadow-sm transition-all flex items-center justify-center cursor-pointer"
+          style={{ background: 'var(--gradient-primary)' }}
         >
           <Send className="w-4 h-4" />
         </button>

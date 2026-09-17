@@ -13,12 +13,17 @@ export function ThemeProvider({ children }) {
     } catch (e) {
       // Ignore localStorage errors
     }
-    return 'light';
+    return 'dark';
   });
 
   useEffect(() => {
     try {
       document.documentElement.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
       localStorage.setItem('smartai-theme', theme);
     } catch (e) {}
   }, [theme]);

@@ -8,6 +8,8 @@ import LazyImage from '../common/LazyImage';
 import { getDifficultyStyle } from '../../utils/difficultyColor';
 import { gsap } from '../../lib/gsap';
 
+import { saveViewedRecipe } from '../../utils/recipeHistory';
+
 export default function RecipeSuggestionCard({ recipe }) {
   const navigate = useNavigate();
   const cardRef = useRef(null);
@@ -19,6 +21,7 @@ export default function RecipeSuggestionCard({ recipe }) {
   };
 
   const handleOpenRecipe = () => {
+    saveViewedRecipe(recipe);
     navigate(`/recipes/${recipe.id || recipe._id}`, { state: { recipe } });
   };
 

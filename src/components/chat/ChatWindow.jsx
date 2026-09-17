@@ -61,15 +61,15 @@ export default function ChatWindow({
               key={idx}
               role={msg.role}
               content={msg.content}
-              isStreaming={msg.isStreaming}
+              isStreaming={msg.isStreaming || (idx === messages.length - 1 && isStreaming)}
+              statusMessage={idx === messages.length - 1 && isStreaming ? statusMessage : null}
               recipeSuggestion={msg.recipeSuggestion}
             />
           ))}
 
-          {statusMessage && <StatusIndicator status={statusMessage} />}
-          
-          {isStreaming && !statusMessage && (messages.length === 0 || messages[messages.length - 1]?.content === '') && (
-            <TypingIndicator />
+          {/* Fallback if streaming started before placeholder exists */}
+          {isStreaming && messages.length === 0 && (
+            <TypingIndicator label={statusMessage || 'Menghubungkan ke asisten...'} />
           )}
 
           <div ref={bottomRef} className="h-4" />
