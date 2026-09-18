@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { createPortal } from 'react-dom';
 import IngredientForm from './IngredientForm';
 import { gsap, useGSAP } from '../../lib/gsap';
 
@@ -33,8 +34,8 @@ export default function IngredientModal({ isOpen, onClose, ingredient, onSuccess
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-4 py-8">
       <div
         ref={backdropRef}
         onClick={handleClose}
@@ -43,13 +44,14 @@ export default function IngredientModal({ isOpen, onClose, ingredient, onSuccess
 
       <div
         ref={modalRef}
-        className="bg-[var(--color-surface)] rounded-3xl shadow-elevated max-w-md w-full p-7 z-10 border border-[var(--color-border)] transition-colors relative"
+        className="bg-[var(--color-surface)] rounded-3xl shadow-elevated max-w-md w-full max-h-[90vh] overflow-y-auto p-7 z-10 border border-[var(--color-border)] transition-colors relative my-auto"
       >
         <h2 className="text-2xl font-bold font-serif text-[var(--color-text)] mb-6">
           {ingredient ? 'Edit Ingredient' : 'Add Ingredient'}
         </h2>
         <IngredientForm initialData={ingredient} onSubmit={onSuccess} onCancel={handleClose} />
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
