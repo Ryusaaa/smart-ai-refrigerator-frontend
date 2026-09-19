@@ -7,6 +7,18 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  try {
+    const token = localStorage.getItem('smartai-auth-token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (e) {
+  }
+  return config;
+});
+
 api.interceptors.response.use(
   (response) => {
     const res = response.data;

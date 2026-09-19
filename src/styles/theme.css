@@ -1,35 +1,39 @@
+:root {
+  --stardust-a0: oklab(24.2% 0.014 -0.083);
+  --stardust-a10: oklab(39.2% 0.02 -0.096);
+  --stardust-a20: oklab(56.6% 0.022 -0.091);
+  --stardust-a30: oklab(87.3% 0.009 -0.03);
+  --stardust-a40: oklab(97.3% 0.004 -0.015);
+
+  --stardust-a5: color-mix(in oklab, var(--stardust-a0), var(--stardust-a10));
+  --stardust-a15: color-mix(in oklab, var(--stardust-a10), var(--stardust-a20));
+  --stardust-a25: color-mix(in oklab, var(--stardust-a20), var(--stardust-a30));
+  --stardust-a35: color-mix(in oklab, var(--stardust-a30), var(--stardust-a40));
+}
+
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --abyss-0: #EAFAEB;
-  --abyss-5: #BDEAE6;
-  --abyss-10: #8DDAE0;
-  --abyss-15: #57A8CC;
-  --abyss-20: #1C77B5;
-  --abyss-25: #00508E;
-  --abyss-30: #002A68;
-  --abyss-35: #000144;
-  --abyss-40: #050021;
 
-  --color-bg: var(--abyss-0);
+  --color-bg: var(--stardust-a40);
   --color-surface: #FFFFFF;
-  --color-surface-alt: rgba(28, 119, 181, 0.09);
+  --color-surface-alt: color-mix(in oklab, var(--stardust-a20) 9%, transparent);
   --color-surface-elevated: rgba(255, 255, 255, 0.75);
 
-  --color-primary: var(--abyss-20);
-  --color-primary-hover: var(--abyss-25);
-  --color-secondary: var(--abyss-15);
-  --color-primary-soft: rgba(28, 119, 181, 0.12);
+  --color-primary: var(--stardust-a20);
+  --color-primary-hover: var(--stardust-a15);
+  --color-secondary: var(--stardust-a25);
+  --color-primary-soft: color-mix(in oklab, var(--stardust-a20) 12%, transparent);
 
-  --gradient-primary: linear-gradient(135deg, var(--abyss-15) 0%, var(--abyss-20) 50%, var(--abyss-30) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--stardust-a25) 0%, var(--stardust-a20) 50%, var(--stardust-a10) 100%);
   --gradient-primary-soft: linear-gradient(135deg,
-    rgba(87, 168, 204, 0.14) 0%,
-    rgba(28, 119, 181, 0.14) 50%,
-    rgba(0, 42, 104, 0.14) 100%);
-  --gradient-text: linear-gradient(90deg, var(--abyss-20) 0%, var(--abyss-25) 50%, var(--abyss-30) 100%);
-  --gradient-bg: radial-gradient(120% 120% at 0% 0%, rgba(28, 119, 181, 0.08) 0%, rgba(28, 119, 181, 0) 55%),
-    radial-gradient(120% 120% at 100% 0%, rgba(87, 168, 204, 0.10) 0%, rgba(87, 168, 204, 0) 55%),
-    var(--abyss-0);
+    color-mix(in oklab, var(--stardust-a25) 14%, transparent) 0%,
+    color-mix(in oklab, var(--stardust-a20) 14%, transparent) 50%,
+    color-mix(in oklab, var(--stardust-a10) 14%, transparent) 100%);
+  --gradient-text: linear-gradient(90deg, var(--stardust-a20) 0%, var(--stardust-a15) 50%, var(--stardust-a10) 100%);
+  --gradient-bg: radial-gradient(120% 120% at 0% 0%, color-mix(in oklab, var(--stardust-a20) 8%, transparent) 0%, transparent 55%),
+    radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--stardust-a25) 10%, transparent) 0%, transparent 55%),
+    var(--stardust-a40);
 
   --color-success: #2FAE72;
   --color-success-soft: rgba(47, 174, 114, 0.14);
@@ -38,26 +42,26 @@
   --color-danger: #D9453B;
   --color-danger-soft: rgba(217, 69, 59, 0.14);
 
-  --color-text: var(--abyss-35);
-  --color-text-muted: rgba(0, 42, 104, 0.62);
-  --color-border: rgba(28, 119, 181, 0.16);
-  --color-border-subtle: rgba(28, 119, 181, 0.08);
+  --color-text: var(--stardust-a5);
+  --color-text-muted: color-mix(in oklab, var(--stardust-a10) 62%, transparent);
+  --color-border: color-mix(in oklab, var(--stardust-a10) 24%, transparent);
+  --color-border-subtle: color-mix(in oklab, var(--stardust-a10) 12%, transparent);
 
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 4px 16px rgba(0, 42, 104, 0.10);
-  --shadow-glow-primary: 0 0 24px rgba(28, 119, 181, 0.3);
+  --shadow-card: 0 4px 16px color-mix(in oklab, var(--stardust-a10) 10%, transparent);
+  --shadow-glow-primary: 0 0 24px color-mix(in oklab, var(--stardust-a20) 30%, transparent);
 
-  --sidebar-bg: var(--abyss-30);
-  --sidebar-surface: var(--abyss-25);
-  --sidebar-border: rgba(234, 250, 235, 0.08);
-  --sidebar-text: var(--abyss-0);
-  --sidebar-text-muted: rgba(234, 250, 235, 0.58);
-  --sidebar-active-bg: rgba(141, 218, 224, 0.18);
-  --sidebar-active-text: var(--abyss-10);
+  --sidebar-bg: var(--stardust-a10);
+  --sidebar-surface: var(--stardust-a15);
+  --sidebar-border: color-mix(in oklab, var(--stardust-a40) 8%, transparent);
+  --sidebar-text: var(--stardust-a40);
+  --sidebar-text-muted: color-mix(in oklab, var(--stardust-a40) 58%, transparent);
+  --sidebar-active-bg: color-mix(in oklab, var(--stardust-a30) 18%, transparent);
+  --sidebar-active-text: var(--stardust-a30);
 
   --font-heading: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -69,35 +73,26 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --abyss-0: #EAFAEB;
-  --abyss-5: #BDEAE6;
-  --abyss-10: #8DDAE0;
-  --abyss-15: #57A8CC;
-  --abyss-20: #1C77B5;
-  --abyss-25: #00508E;
-  --abyss-30: #002A68;
-  --abyss-35: #000144;
-  --abyss-40: #050021;
 
-  --color-bg: var(--abyss-40);
-  --color-surface: var(--abyss-35);
-  --color-surface-alt: #001556;
-  --color-surface-elevated: rgba(0, 42, 104, 0.55);
+  --color-bg: var(--stardust-a0);
+  --color-surface: var(--stardust-a5);
+  --color-surface-alt: color-mix(in oklab, var(--stardust-a0), var(--stardust-a5));
+  --color-surface-elevated: color-mix(in oklab, var(--stardust-a10) 55%, transparent);
 
-  --color-primary: var(--abyss-10);
-  --color-primary-hover: var(--abyss-5);
-  --color-secondary: var(--abyss-15);
-  --color-primary-soft: rgba(141, 218, 224, 0.15);
+  --color-primary: var(--stardust-a30);
+  --color-primary-hover: var(--stardust-a35);
+  --color-secondary: var(--stardust-a25);
+  --color-primary-soft: color-mix(in oklab, var(--stardust-a30) 15%, transparent);
 
-  --gradient-primary: linear-gradient(135deg, var(--abyss-10) 0%, var(--abyss-20) 50%, var(--abyss-30) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--stardust-a30) 0%, var(--stardust-a20) 50%, var(--stardust-a10) 100%);
   --gradient-primary-soft: linear-gradient(135deg,
-    rgba(141, 218, 224, 0.16) 0%,
-    rgba(28, 119, 181, 0.16) 50%,
-    rgba(0, 42, 104, 0.16) 100%);
-  --gradient-text: linear-gradient(90deg, var(--abyss-5) 0%, var(--abyss-15) 50%, var(--abyss-20) 100%);
-  --gradient-bg: radial-gradient(120% 120% at 0% 0%, rgba(141, 218, 224, 0.10) 0%, rgba(141, 218, 224, 0) 55%),
-    radial-gradient(120% 120% at 100% 0%, rgba(28, 119, 181, 0.16) 0%, rgba(28, 119, 181, 0) 55%),
-    var(--abyss-40);
+    color-mix(in oklab, var(--stardust-a30) 16%, transparent) 0%,
+    color-mix(in oklab, var(--stardust-a20) 16%, transparent) 50%,
+    color-mix(in oklab, var(--stardust-a10) 16%, transparent) 100%);
+  --gradient-text: linear-gradient(90deg, var(--stardust-a35) 0%, var(--stardust-a25) 50%, var(--stardust-a20) 100%);
+  --gradient-bg: radial-gradient(120% 120% at 0% 0%, color-mix(in oklab, var(--stardust-a30) 10%, transparent) 0%, transparent 55%),
+    radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--stardust-a20) 16%, transparent) 0%, transparent 55%),
+    var(--stardust-a0);
 
   --color-success: #4FD196;
   --color-success-soft: rgba(79, 209, 150, 0.16);
@@ -106,10 +101,10 @@
   --color-danger: #F2554B;
   --color-danger-soft: rgba(242, 85, 75, 0.16);
 
-  --color-text: var(--abyss-0);
-  --color-text-muted: rgba(234, 250, 235, 0.58);
-  --color-border: rgba(141, 218, 224, 0.14);
-  --color-border-subtle: rgba(141, 218, 224, 0.06);
+  --color-text: var(--stardust-a40);
+  --color-text-muted: color-mix(in oklab, var(--stardust-a40) 58%, transparent);
+  --color-border: color-mix(in oklab, var(--stardust-a30) 20%, transparent);
+  --color-border-subtle: color-mix(in oklab, var(--stardust-a30) 10%, transparent);
 
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -117,15 +112,15 @@
   --radius-pill: 999px;
 
   --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.5);
-  --shadow-glow-primary: 0 0 24px rgba(141, 218, 224, 0.35);
+  --shadow-glow-primary: 0 0 24px color-mix(in oklab, var(--stardust-a30) 35%, transparent);
 
-  --sidebar-bg: var(--abyss-40);
-  --sidebar-surface: var(--abyss-35);
-  --sidebar-border: rgba(141, 218, 224, 0.10);
-  --sidebar-text: var(--abyss-0);
-  --sidebar-text-muted: rgba(234, 250, 235, 0.55);
-  --sidebar-active-bg: rgba(141, 218, 224, 0.16);
-  --sidebar-active-text: var(--abyss-10);
+  --sidebar-bg: var(--stardust-a0);
+  --sidebar-surface: var(--stardust-a5);
+  --sidebar-border: color-mix(in oklab, var(--stardust-a30) 10%, transparent);
+  --sidebar-text: var(--stardust-a40);
+  --sidebar-text-muted: color-mix(in oklab, var(--stardust-a40) 55%, transparent);
+  --sidebar-active-bg: color-mix(in oklab, var(--stardust-a30) 16%, transparent);
+  --sidebar-active-text: var(--stardust-a30);
 
   --font-heading: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;

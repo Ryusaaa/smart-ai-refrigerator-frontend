@@ -1,12 +1,12 @@
-// client/src/components/layout/Topbar.jsx
-// Topbar header with search, notification, theme toggle, and user avatar per REDESIGN-INSTRUCTIONS.MD Section 3.B
-
 import React from 'react';
-import { Menu, Search, Bell } from 'lucide-react';
+import { Menu, Search, Bell, LogOut } from 'lucide-react';
 import ThemeToggle from '../common/ThemeToggle';
 import Avatar from '../common/Avatar';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Topbar({ onOpenSidebar }) {
+  const { user, logout } = useAuth();
+
   return (
     <header className="h-16 border-b border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-md sticky top-0 z-20 transition-colors px-4 sm:px-6 lg:px-8 flex items-center justify-between">
       {/* Left: Mobile menu toggle & Search bar */}
@@ -45,7 +45,17 @@ export default function Topbar({ onOpenSidebar }) {
 
         <div className="h-6 w-px bg-[var(--color-border)] mx-1" />
 
-        <Avatar name="Ibnu" role="Home User" />
+        <Avatar name={user?.name || 'Home User'} role={user?.email || 'Home User'} />
+
+        <button
+          type="button"
+          onClick={logout}
+          className="p-2 rounded-xl text-[var(--color-text-muted)] hover:bg-[var(--color-danger-soft)] hover:text-[var(--color-danger)] transition-colors cursor-pointer"
+          aria-label="Sign out"
+          title="Sign out"
+        >
+          <LogOut className="w-4.5 h-4.5" />
+        </button>
       </div>
     </header>
   );
