@@ -7,8 +7,7 @@ export default function StatsCard({ title, value, subtitle, icon: Icon, color = 
   };
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-2xl shadow-sm p-4.5 border border-[var(--color-border)] transition-colors">
-      <div className="flex items-center">
+      <div className="bg-[var(--color-surface)] rounded-2xl shadow-[var(--shadow-card)] p-4.5 border border-[var(--color-card-border)] transition-colors">      <div className="flex items-center">
         <div className={`p-3 rounded-xl ${colorMap[color] || colorMap.blue} flex items-center justify-center flex-shrink-0`}>
           <Icon className="w-5 h-5" />
         </div>

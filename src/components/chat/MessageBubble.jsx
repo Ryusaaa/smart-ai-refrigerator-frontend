@@ -156,7 +156,15 @@ export default function MessageBubble({
               </div>
               <span
                 ref={statusTextRef}
-                className="text-sm font-semibold tracking-wide bg-[var(--gradient-text)] bg-clip-text text-transparent"
+                className="text-sm font-semibold tracking-wide"
+                style={{
+                  backgroundImage: 'var(--gradient-text)',
+                  backgroundSize: '200% 100%',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  WebkitTextFillColor: 'transparent',
+                }}
               >
                 {rotatingStatus}
               </span>

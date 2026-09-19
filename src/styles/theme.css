@@ -46,6 +46,7 @@
   --color-text-muted: color-mix(in oklab, var(--stardust-a10) 62%, transparent);
   --color-border: color-mix(in oklab, var(--stardust-a10) 24%, transparent);
   --color-border-subtle: color-mix(in oklab, var(--stardust-a10) 12%, transparent);
+  --color-card-border: var(--color-border);
 
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -103,15 +104,16 @@
 
   --color-text: var(--stardust-a40);
   --color-text-muted: color-mix(in oklab, var(--stardust-a40) 58%, transparent);
-  --color-border: color-mix(in oklab, var(--stardust-a30) 20%, transparent);
-  --color-border-subtle: color-mix(in oklab, var(--stardust-a30) 10%, transparent);
+  --color-border: color-mix(in oklab, var(--stardust-a30) 8%, transparent);
+  --color-border-subtle: color-mix(in oklab, var(--stardust-a30) 4%, transparent);
+  --color-card-border: transparent;
 
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
   --shadow-glow-primary: 0 0 24px color-mix(in oklab, var(--stardust-a30) 35%, transparent);
 
   --sidebar-bg: var(--stardust-a0);

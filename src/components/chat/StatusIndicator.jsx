@@ -42,8 +42,15 @@ export default function StatusIndicator({ status }) {
       <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--color-primary)]" />
       <span
         ref={textRef}
-        className="bg-[var(--gradient-text)] bg-clip-text text-transparent font-medium tracking-wide"
-        style={{ backgroundSize: '200% 100%' }}
+        className="font-medium tracking-wide"
+        style={{
+          backgroundImage: 'var(--gradient-text)',
+          backgroundSize: '200% 100%',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitTextFillColor: 'transparent',
+        }}
       >
         {status}
       </span>

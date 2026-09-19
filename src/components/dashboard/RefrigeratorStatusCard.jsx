@@ -1,12 +1,10 @@
-// client/src/components/dashboard/RefrigeratorStatusCard.jsx
-// Visual digital twin card matching the reference dashboard photo
 import React from 'react';
 import { Thermometer, Droplets, DoorClosed, ChevronRight, Snowflake } from 'lucide-react';
 import refrigeratorImg from '../../assets/refrigerator.png';
 
 export default function RefrigeratorStatusCard({ totalIngredients = 0 }) {
   return (
-    <div className="bg-[var(--color-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] overflow-hidden transition-colors flex flex-col justify-between">
+    <div className="bg-[var(--color-surface)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--color-card-border)] overflow-hidden transition-colors flex flex-col justify-between">
       {/* Header */}
       <div className="px-5 py-3.5 border-b border-[var(--color-border)] flex justify-between items-center">
         <div className="flex items-center space-x-2">

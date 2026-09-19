@@ -87,8 +87,15 @@ export default function TypingIndicator({ label }) {
             {/* Rotating text */}
             <span
               ref={shimmerTextRef}
-              className="text-sm font-semibold tracking-wide bg-[var(--gradient-text)] bg-clip-text text-transparent"
-              style={{ backgroundSize: '200% 100%' }}
+              className="text-sm font-semibold tracking-wide"
+              style={{
+                backgroundImage: 'var(--gradient-text)',
+                backgroundSize: '200% 100%',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+                WebkitTextFillColor: 'transparent',
+              }}
             >
               {displayLabel}
             </span>
