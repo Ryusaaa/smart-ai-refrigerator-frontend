@@ -131,3 +131,21 @@
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+root {
+  --theme-transition-duration: 700ms;
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color var(--theme-transition-duration) ease-in-out,
+    border-color var(--theme-transition-duration) ease-in-out,
+    color var(--theme-transition-duration) ease-in-out,
+    fill var(--theme-transition-duration) ease-in-out,
+    stroke var(--theme-transition-duration) ease-in-out,
+    box-shadow var(--theme-transition-duration) ease-in-out !important;
+  transition-delay: 0s !important;
+}

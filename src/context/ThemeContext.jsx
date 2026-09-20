@@ -1,8 +1,12 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 
 export const ThemeContext = createContext();
 
+const THEME_TRANSITION_MS = 700;
+
 export function ThemeProvider({ children }) {
+  const transitionTimerRef = useRef(null);
+
   const [theme, setThemeState] = useState(() => {
     try {
       const saved = localStorage.getItem('smartai-theme');
@@ -11,7 +15,6 @@ export function ThemeProvider({ children }) {
         return 'dark';
       }
     } catch (e) {
-      // Ignore localStorage errors
     }
     return 'dark';
   });
@@ -28,12 +31,32 @@ export function ThemeProvider({ children }) {
     } catch (e) {}
   }, [theme]);
 
+  useEffect(() => () => clearTimeout(transitionTimerRef.current), []);
+
+  const withThemeTransition = (applyChange) => {
+    try {
+      const reduceMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduceMotion) {
+        const root = document.documentElement;
+        root.classList.add('theme-transition');
+        clearTimeout(transitionTimerRef.current);
+        transitionTimerRef.current = setTimeout(() => {
+          root.classList.remove('theme-transition');
+        }, THEME_TRANSITION_MS + 100);
+      }
+    } catch (e) {}
+    applyChange();
+  };
+
   const toggleTheme = () => {
-    setThemeState(prev => (prev === 'light' ? 'dark' : 'light'));
+    withThemeTransition(() => setThemeState(prev => (prev === 'light' ? 'dark' : 'light')));
   };
 
   const setTheme = (t) => {
-    if (t === 'light' || t === 'dark') setThemeState(t);
+    if (t === 'light' || t === 'dark') {
+      withThemeTransition(() => setThemeState(t));
+    }
   };
 
   return (

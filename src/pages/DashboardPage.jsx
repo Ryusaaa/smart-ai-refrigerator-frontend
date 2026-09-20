@@ -10,6 +10,7 @@ import RecommendedRecipesCard from '../components/dashboard/RecommendedRecipesCa
 import ReduceWasteBanner from '../components/dashboard/ReduceWasteBanner';
 import AIAssistantPanel from '../components/dashboard/AIAssistantPanel';
 import { useEntranceAnimation } from '../hooks/useEntranceAnimation';
+import { useAuth } from '../hooks/useAuth';
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -18,9 +19,15 @@ function getGreeting() {
   return 'Good Evening';
 }
 
+
+function getFirstName(fullName) {
+  return (fullName || '').trim().split(/\s+/)[0] || '';
+}
+
 function getFormattedTime() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
+
 
 function DashboardSkeleton() {
   return (
@@ -39,6 +46,7 @@ function DashboardSkeleton() {
 }
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -62,6 +70,7 @@ export default function DashboardPage() {
   }
   if (!data) return null;
 
+  const firstName = getFirstName(user?.name);
   const totalIngredients = data.totalIngredients || data.stats?.totalIngredients || 0;
   const expiringCount = data.expiringCount || data.stats?.expiringCount || 0;
   const expiringItems = data.expiringItems || [];
@@ -75,7 +84,7 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold font-serif text-[var(--color-text)] tracking-tight">
-            {getGreeting()}, Ibnu 👋
+            {getGreeting()}{firstName ? `, ${firstName}` : ''} 👋
           </h1>
           <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mt-1">
             Your smart refrigerator is running smoothly. Here's what's happening today.

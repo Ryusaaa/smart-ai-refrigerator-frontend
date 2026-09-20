@@ -3,9 +3,10 @@
 
 import React from 'react';
 
-export default function Avatar({ name = 'Ibnu', role = 'Home User', size = 'md' }) {
+export default function Avatar({ name = 'Home User', role = 'Home User', size = 'md' }) {
   const initials = name
     .split(' ')
+    .filter(Boolean)
     .map(n => n[0])
     .join('')
     .toUpperCase()

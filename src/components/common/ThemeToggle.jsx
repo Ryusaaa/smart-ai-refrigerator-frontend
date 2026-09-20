@@ -13,8 +13,8 @@ export default function ThemeToggle() {
     if (!iconRef.current) return;
     gsap.fromTo(
       iconRef.current,
-      { rotate: isDark ? -90 : 90, scale: 0.7, opacity: 0 },
-      { rotate: 0, scale: 1, opacity: 1, duration: 0.25, ease: 'back.out(1.7)' }
+      { rotate: isDark ? -120 : 120, scale: 0.5, opacity: 0 },
+      { rotate: 0, scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(1.4)' }
     );
   }, { dependencies: [isDark] });
 
