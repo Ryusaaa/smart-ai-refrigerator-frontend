@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useRef } from 'react';
 
 export const ThemeContext = createContext();
 
-const THEME_TRANSITION_MS = 700;
+const THEME_TRANSITION_MS = 1100;
 
 export function ThemeProvider({ children }) {
   const transitionTimerRef = useRef(null);
