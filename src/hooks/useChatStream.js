@@ -1,11 +1,20 @@
-// client/src/hooks/useChatStream.js
-// Enhanced SSE chat streaming hook with persistence and recipe event support per REDESIGN-INSTRUCTIONS.MD Sections 3.D & 3.E
-
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { chatApi } from '../services/chat.api';
 import { saveViewedRecipe } from '../utils/recipeHistory';
 
 const SESSION_STORAGE_KEY = 'smartai_conversation_id';
+
+// Ubah pesan assistant terakhir. `patch` boleh object (di-merge) atau fungsi (last) => pesan baru.
+function updateLastAssistant(setMessages, patch) {
+  setMessages((prev) => {
+    const updated = [...prev];
+    const last = updated[updated.length - 1];
+    if (last && last.role === 'assistant') {
+      updated[updated.length - 1] = typeof patch === 'function' ? patch(last) : { ...last, ...patch };
+    }
+    return updated;
+  });
+}
 
 export function useChatStream() {
   const [messages, setMessages] = useState([]);
@@ -45,18 +54,13 @@ export function useChatStream() {
     }
     setIsStreaming(false);
     setStatusMessage('');
-    setMessages(prev => {
-      const updated = [...prev];
-      const last = updated[updated.length - 1];
-      if (last && last.role === 'assistant') {
-        updated[updated.length - 1] = {
-          ...last,
-          isStreaming: false,
-          content: last.content ? last.content + ' *(stopped)*' : '*(stopped)*'
-        };
-      }
-      return updated;
-    });
+    updateLastAssistant(setMessages, (last) => ({
+      ...last,
+      isStreaming: false,
+      // Dihentikan user: jangan biarkan animasi kartu resep berputar terus.
+      recipeStatus: last.recipeStatus === 'loading' ? undefined : last.recipeStatus,
+      content: last.content ? last.content + ' *(stopped)*' : '*(stopped)*'
+    }));
   }, []);
 
   const sendMessage = useCallback(async (text) => {
@@ -72,6 +76,51 @@ export function useChatStream() {
 
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    const handleEvent = (eventType, parsed) => {
+      switch (eventType) {
+        case 'status':
+          setStatusMessage(parsed.status || '');
+          break;
+
+        case 'token':
+          setStatusMessage('');
+          updateLastAssistant(setMessages, (last) => ({
+            ...last,
+            content: last.content + (parsed.token || '')
+          }));
+          break;
+
+        case 'recipe_pending':
+          // Teks jawaban sudah selesai, kartu resep sedang disiapkan -> tampilkan animasi loading.
+          setStatusMessage('');
+          updateLastAssistant(setMessages, { recipeStatus: 'loading' });
+          break;
+
+        case 'recipe':
+          // Section 3.E: Structured recipe suggestion event from backend
+          saveViewedRecipe(parsed);
+          updateLastAssistant(setMessages, { recipeSuggestion: parsed, recipeStatus: 'ready' });
+          break;
+
+        case 'recipe_failed':
+          updateLastAssistant(setMessages, { recipeStatus: 'failed' });
+          break;
+
+        case 'done':
+          if (parsed.conversationId) {
+            setConversationId(parsed.conversationId);
+            sessionStorage.setItem(SESSION_STORAGE_KEY, parsed.conversationId);
+          }
+          break;
+
+        case 'error':
+          throw new Error(parsed.error || 'Terjadi kesalahan pada AI');
+
+        default:
+          break;
+      }
+    };
 
     try {
       const params = new URLSearchParams({ message: text });
@@ -107,81 +156,35 @@ export function useChatStream() {
 
           if (!dataRaw) continue;
 
+          let parsed;
           try {
-            const parsed = JSON.parse(dataRaw);
-
-            if (eventType === 'status') {
-              setStatusMessage(parsed.status || '');
-            } else if (eventType === 'token') {
-              setStatusMessage('');
-              const token = parsed.token || '';
-              setMessages(prev => {
-                const updated = [...prev];
-                const last = updated[updated.length - 1];
-                if (last && last.role === 'assistant') {
-                  updated[updated.length - 1] = {
-                    ...last,
-                    content: last.content + token
-                  };
-                }
-                return updated;
-              });
-            } else if (eventType === 'recipe') {
-              // Section 3.E: Structured recipe suggestion event from backend
-              saveViewedRecipe(parsed);
-              setMessages(prev => {
-                const updated = [...prev];
-                const last = updated[updated.length - 1];
-                if (last && last.role === 'assistant') {
-                  updated[updated.length - 1] = {
-                    ...last,
-                    recipeSuggestion: parsed
-                  };
-                }
-                return updated;
-              });
-            } else if (eventType === 'done') {
-              if (parsed.conversationId) {
-                setConversationId(parsed.conversationId);
-                sessionStorage.setItem(SESSION_STORAGE_KEY, parsed.conversationId);
-              }
-            } else if (eventType === 'error') {
-              throw new Error(parsed.error || 'Terjadi kesalahan pada AI');
-            }
+            parsed = JSON.parse(dataRaw);
           } catch (e) {
-            // Ignore parse errors for split fragments
+            continue; // Ignore parse errors for split fragments
           }
+
+          // Di luar try/catch di atas supaya event `error` benar-benar sampai ke catch di bawah.
+          handleEvent(eventType, parsed);
         }
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
         console.error('Stream error:', err);
-        setMessages(prev => {
-          const updated = [...prev];
-          const last = updated[updated.length - 1];
-          if (last && last.role === 'assistant' && !last.content) {
-            updated[updated.length - 1] = {
-              role: 'assistant',
-              content: 'Maaf, terjadi kendala saat memproses jawaban. Silakan coba lagi.'
-            };
-          }
-          return updated;
-        });
+        updateLastAssistant(setMessages, (last) =>
+          last.content
+            ? last
+            : { ...last, content: 'Maaf, terjadi kendala saat memproses jawaban. Silakan coba lagi.' }
+        );
       }
     } finally {
       setIsStreaming(false);
       setStatusMessage('');
-      setMessages(prev => {
-        const updated = [...prev];
-        const last = updated[updated.length - 1];
-        if (last && last.role === 'assistant') {
-          updated[updated.length - 1] = {
-            ...last,
-            isStreaming: false
-          };
-        }
-        return updated;
-      });
+      // Apa pun yang terjadi, animasi loading kartu resep tidak boleh menggantung.
+      updateLastAssistant(setMessages, (last) => ({
+        ...last,
+        isStreaming: false,
+        recipeStatus: last.recipeStatus === 'loading' ? 'failed' : last.recipeStatus
+      }));
       abortControllerRef.current = null;
     }
   }, [conversationId, isStreaming]);

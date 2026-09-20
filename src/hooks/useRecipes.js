@@ -29,7 +29,7 @@ export function useRecipes() {
       const data = await recipeApi.getAll();
       setRecipes(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch recipes');
+      setError(err.error || err.message || 'Failed to generate recipes');
     } finally {
       setLoading(false);
     }

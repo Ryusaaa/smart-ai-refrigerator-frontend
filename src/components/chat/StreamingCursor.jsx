@@ -30,7 +30,7 @@ export default function StreamingCursor() {
     <span
       ref={cursorRef}
       aria-hidden="true"
-      className="inline-block w-2.5 h-2.5 rounded-full ml-1.5 align-middle shadow-xs bg-[var(--gradient-primary)]"
+      className="inline-block w-2.5 h-2.5 rounded-full ml-1.5 align-middle shadow-xs bg-[image:var(--gradient-primary)]"
     />
   );
 }

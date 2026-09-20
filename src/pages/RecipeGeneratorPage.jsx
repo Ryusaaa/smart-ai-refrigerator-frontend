@@ -107,7 +107,7 @@ export default function RecipeGeneratorPage() {
               </p>
               <div className="w-48 h-1.5 bg-[var(--color-surface-alt)] rounded-full mt-6 overflow-hidden">
                 <div
-                  className="h-full bg-[var(--gradient-primary)] rounded-full skeleton-shimmer"
+                  className="h-full bg-[var(--gradient-primary)] rounded-full skeleton-shimmer "
                   style={{ width: '100%' }}
                 />
               </div>
@@ -153,7 +153,7 @@ export default function RecipeGeneratorPage() {
                       aria-label="Grid view"
                       className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                         view === 'grid'
-                          ? 'bg-[var(--gradient-primary)] text-white shadow-xs'
+                          ? 'bg-[image:var(--gradient-primary)] text-white shadow-xs'
                           : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
                       }`}
                     >

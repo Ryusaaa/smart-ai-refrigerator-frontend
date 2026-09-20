@@ -64,6 +64,7 @@ export default function ChatWindow({
               isStreaming={msg.isStreaming || (idx === messages.length - 1 && isStreaming)}
               statusMessage={idx === messages.length - 1 && isStreaming ? statusMessage : null}
               recipeSuggestion={msg.recipeSuggestion}
+              recipeStatus={msg.recipeStatus}
             />
           ))}
 

@@ -1,14 +1,17 @@
-// client/src/components/chat/RecipeSuggestionCard.jsx
-// Interactive recipe suggestion card in chat stream per REDESIGN-INSTRUCTIONS.MD Section 3.E
 
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, ArrowRight, ChefHat, Sparkles } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
 import LazyImage from '../common/LazyImage';
 import { getDifficultyStyle } from '../../utils/difficultyColor';
 import { gsap } from '../../lib/gsap';
 
 import { saveViewedRecipe } from '../../utils/recipeHistory';
+
+const BUTTON_STYLE = {
+  background: 'linear-gradient(135deg, var(--stardust-a20) 0%, var(--stardust-a10) 100%)',
+  color: '#FFFFFF',
+};
 
 export default function RecipeSuggestionCard({ recipe }) {
   const navigate = useNavigate();
@@ -28,10 +31,10 @@ export default function RecipeSuggestionCard({ recipe }) {
   return (
     <div
       ref={cardRef}
-      className="mt-3.5 p-3.5 bg-[var(--color-surface-alt)]/80 rounded-2xl border border-[var(--color-border)] shadow-xs transition-colors text-[var(--color-text)] flex flex-col sm:flex-row gap-3.5 items-start sm:items-center justify-between"
+      className="mt-3.5 p-3.5 bg-[var(--color-surface-alt)] rounded-2xl border border-[var(--color-border)] shadow-xs transition-colors text-[var(--color-text)] flex flex-col sm:flex-row gap-3.5 items-start sm:items-center justify-between animate-recipe-fade-in"
     >
       <div className="flex items-center space-x-3 min-w-0 flex-1">
-        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-[var(--color-border)]/60">
+        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-[var(--color-border)]">
           <LazyImage
             src={recipe.imageUrl}
             alt={recipe.title}
@@ -62,7 +65,8 @@ export default function RecipeSuggestionCard({ recipe }) {
         onPointerDown={(e) => handlePointerDown(e.currentTarget)}
         onClick={handleOpenRecipe}
         type="button"
-        className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[var(--gradient-primary)] hover:opacity-90 transition-all shadow-xs cursor-pointer flex-shrink-0"
+        style={BUTTON_STYLE}
+        className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-semibold hover:brightness-110 transition-all shadow-xs cursor-pointer flex-shrink-0"
       >
         <span>Lihat Resep Ini</span>
         <ArrowRight className="w-3.5 h-3.5" />
