@@ -102,15 +102,15 @@ export default function DashboardPage() {
       </div>
 
       {/* ── Main 3-Column Grid Layout ────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-6.5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* ─── Column 1: Refrigerator Status + Temperature Trend ───────────── */}
-        <div className="space-y-6 flex flex-col">
+        <div className="space-y-6 flex flex-col min-w-0">
           <RefrigeratorStatusCard totalIngredients={totalIngredients} />
           <TemperatureTrendCard />
         </div>
 
         {/* ─── Column 2: Inventory Overview + Recent Activity ───────────────── */}
-        <div className="space-y-6 flex flex-col">
+        <div className="space-y-6 flex flex-col min-w-0">
           <InventoryOverviewCard
             totalCount={totalIngredients}
             categories={categoryBreakdown}
@@ -120,7 +120,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ─── Column 3: AI Assistant + Recommended Recipes ─────────────────── */}
-        <div className="space-y-6 flex flex-col">
+        <div className="space-y-6 flex flex-col min-w-0">
           <AIAssistantPanel />
           <RecommendedRecipesCard recipes={recipes} />
         </div>
