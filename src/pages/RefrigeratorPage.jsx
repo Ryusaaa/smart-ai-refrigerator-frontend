@@ -114,23 +114,29 @@ export default function RefrigeratorPage() {
       {error && <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 text-center text-sm">{error}</div>}
 
       {notice && (
-        <div className="fixed right-4 top-4 z-[60] pointer-events-none">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
           <div
             aria-live="polite"
-            className={`toast-pop pointer-events-auto flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-medium shadow-lg backdrop-blur-sm ${
+            className={`toast-pop relative pointer-events-auto w-[min(90vw,420px)] rounded-[28px] border p-6 text-center shadow-[0_24px_80px_rgba(15,23,42,0.22)] ${
               notice.type === 'success'
-                ? 'bg-[var(--color-success-soft)] border-[var(--color-success)]/30 text-[var(--color-success)]'
-                : 'bg-[var(--color-danger-soft)] border-[var(--color-danger)]/30 text-[var(--color-danger)]'
+                ? 'bg-[var(--color-surface)] border-[var(--color-success)]/30 text-[var(--color-text)]'
+                : 'bg-[var(--color-surface)] border-[var(--color-danger)]/30 text-[var(--color-text)]'
             }`}
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/40">
+            <div className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${
+              notice.type === 'success' ? 'bg-[var(--color-success-soft)] text-[var(--color-success)]' : 'bg-[var(--color-danger-soft)] text-[var(--color-danger)]'
+            }`}>
               {notice.type === 'success' ? (
-                <CheckCircle2 className="h-4 w-4 text-[var(--color-success)]" />
+                <CheckCircle2 className="h-8 w-8" />
               ) : (
-                <AlertCircle className="h-4 w-4 text-[var(--color-danger)]" />
+                <AlertCircle className="h-8 w-8" />
               )}
-            </span>
-            <span className="max-w-xs">{notice.message}</span>
+            </div>
+            <h3 className="text-xl font-bold font-serif text-[var(--color-text)] mb-2">
+              {notice.type === 'success' ? 'Success!' : 'Oops!'}
+            </h3>
+            <p className="text-sm leading-6 text-[var(--color-text-muted)]">{notice.message}</p>
           </div>
         </div>
       )}
