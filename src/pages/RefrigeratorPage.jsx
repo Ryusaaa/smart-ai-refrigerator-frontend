@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, Search, Package } from 'lucide-react';
+import { Plus, Search, Package, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useIngredients } from '../hooks/useIngredients';
 import IngredientCard from '../components/ingredient/IngredientCard';
 import IngredientModal from '../components/ingredient/IngredientModal';
@@ -114,15 +114,24 @@ export default function RefrigeratorPage() {
       {error && <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 text-center text-sm">{error}</div>}
 
       {notice && (
-        <div
-          className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-medium shadow-sm ${
-            notice.type === 'success'
-              ? 'bg-[var(--color-success-soft)] border-[var(--color-success)]/30 text-[var(--color-success)]'
-              : 'bg-[var(--color-danger-soft)] border-[var(--color-danger)]/30 text-[var(--color-danger)]'
-          }`}
-        >
-          <span className={`h-2.5 w-2.5 rounded-full ${notice.type === 'success' ? 'bg-[var(--color-success)]' : 'bg-[var(--color-danger)]'}`} />
-          <span>{notice.message}</span>
+        <div className="fixed right-4 top-4 z-[60] pointer-events-none">
+          <div
+            aria-live="polite"
+            className={`toast-pop pointer-events-auto flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-medium shadow-lg backdrop-blur-sm ${
+              notice.type === 'success'
+                ? 'bg-[var(--color-success-soft)] border-[var(--color-success)]/30 text-[var(--color-success)]'
+                : 'bg-[var(--color-danger-soft)] border-[var(--color-danger)]/30 text-[var(--color-danger)]'
+            }`}
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/40">
+              {notice.type === 'success' ? (
+                <CheckCircle2 className="h-4 w-4 text-[var(--color-success)]" />
+              ) : (
+                <AlertCircle className="h-4 w-4 text-[var(--color-danger)]" />
+              )}
+            </span>
+            <span className="max-w-xs">{notice.message}</span>
+          </div>
         </div>
       )}
 
