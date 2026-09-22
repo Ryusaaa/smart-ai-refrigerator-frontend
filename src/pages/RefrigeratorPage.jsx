@@ -13,11 +13,18 @@ export default function RefrigeratorPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [modalState, setModalState] = useState({ isOpen: false, ingredient: null });
+  const [notice, setNotice] = useState(null);
   const addBtnRef = useRef(null);
 
   useEffect(() => {
     fetchIngredients();
   }, [fetchIngredients]);
+
+  useEffect(() => {
+    if (!notice) return;
+    const timer = setTimeout(() => setNotice(null), 3000);
+    return () => clearTimeout(timer);
+  }, [notice]);
 
   const list = Array.isArray(ingredients) ? ingredients : [];
   const filtered = list.filter(i => {
@@ -30,12 +37,14 @@ export default function RefrigeratorPage() {
     try {
       if (modalState.ingredient) {
         await updateIngredient(modalState.ingredient.id || modalState.ingredient._id, data);
+        setNotice({ type: 'success', message: `${data.name || 'Ingredient'} updated successfully.` });
       } else {
         await createIngredient(data);
+        setNotice({ type: 'success', message: `${data.name || 'Ingredient'} has been added to your fridge.` });
       }
       setModalState({ isOpen: false, ingredient: null });
     } catch (e) {
-      alert(e.message);
+      setNotice({ type: 'error', message: e.message || 'Failed to save ingredient.' });
     }
   };
 
@@ -103,6 +112,19 @@ export default function RefrigeratorPage() {
       </div>
 
       {error && <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 text-center text-sm">{error}</div>}
+
+      {notice && (
+        <div
+          className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-medium shadow-sm ${
+            notice.type === 'success'
+              ? 'bg-[var(--color-success-soft)] border-[var(--color-success)]/30 text-[var(--color-success)]'
+              : 'bg-[var(--color-danger-soft)] border-[var(--color-danger)]/30 text-[var(--color-danger)]'
+          }`}
+        >
+          <span className={`h-2.5 w-2.5 rounded-full ${notice.type === 'success' ? 'bg-[var(--color-success)]' : 'bg-[var(--color-danger)]'}`} />
+          <span>{notice.message}</span>
+        </div>
+      )}
 
       {loading && !ingredients.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
