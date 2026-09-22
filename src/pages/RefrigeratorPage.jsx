@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, Search, Package, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Plus, Search, Package } from 'lucide-react';
 import { useIngredients } from '../hooks/useIngredients';
+import { useToast } from '../hooks/useToast';
 import IngredientCard from '../components/ingredient/IngredientCard';
 import IngredientModal from '../components/ingredient/IngredientModal';
+import ToastStack from '../components/common/ToastStack';
 import ScrollReveal from '../components/common/ScrollReveal';
 import { gsap } from '../lib/gsap';
 
@@ -10,21 +12,15 @@ const CATEGORIES = ['All', 'Meat', 'Seafood', 'Vegetable', 'Fruit', 'Dairy/Prote
 
 export default function RefrigeratorPage() {
   const { ingredients, loading, error, fetchIngredients, createIngredient, updateIngredient, deleteIngredient } = useIngredients();
+  const { toasts, showToast, dismissToast } = useToast();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [modalState, setModalState] = useState({ isOpen: false, ingredient: null });
-  const [notice, setNotice] = useState(null);
   const addBtnRef = useRef(null);
 
   useEffect(() => {
     fetchIngredients();
   }, [fetchIngredients]);
-
-  useEffect(() => {
-    if (!notice) return;
-    const timer = setTimeout(() => setNotice(null), 3000);
-    return () => clearTimeout(timer);
-  }, [notice]);
 
   const list = Array.isArray(ingredients) ? ingredients : [];
   const filtered = list.filter(i => {
@@ -34,26 +30,45 @@ export default function RefrigeratorPage() {
   });
 
   const handleSave = async (data) => {
+    const isEditing = Boolean(modalState.ingredient);
     try {
-      if (modalState.ingredient) {
+      if (isEditing) {
         await updateIngredient(modalState.ingredient.id || modalState.ingredient._id, data);
-        setNotice({ type: 'success', message: `${data.name || 'Ingredient'} updated successfully.` });
       } else {
         await createIngredient(data);
-        setNotice({ type: 'success', message: `${data.name || 'Ingredient'} has been added to your fridge.` });
       }
       setModalState({ isOpen: false, ingredient: null });
+      showToast({
+        type: 'success',
+        title: isEditing ? 'Ingredient updated' : 'Added to fridge',
+        message: isEditing
+          ? `${data.name || 'Ingredient'} was updated successfully.`
+          : `${data.name || 'Ingredient'} has been added to your fridge.`,
+      });
     } catch (e) {
-      setNotice({ type: 'error', message: e.message || 'Failed to save ingredient.' });
+      showToast({
+        type: 'error',
+        title: 'Something went wrong',
+        message: e.message || 'Failed to save ingredient.',
+      });
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, name) => {
     if (window.confirm('Delete this ingredient?')) {
       try {
         await deleteIngredient(id);
+        showToast({
+          type: 'success',
+          title: 'Ingredient removed',
+          message: `${name || 'The ingredient'} has been removed from your fridge.`,
+        });
       } catch (e) {
-        alert(e.message);
+        showToast({
+          type: 'error',
+          title: 'Delete failed',
+          message: e.message || 'Could not delete this ingredient.',
+        });
       }
     }
   };
@@ -64,6 +79,8 @@ export default function RefrigeratorPage() {
 
   return (
     <div className="space-y-6">
+      <ToastStack toasts={toasts} onDismiss={dismissToast} />
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold font-serif text-[var(--color-text)]">Refrigerator Stock</h1>
@@ -113,34 +130,6 @@ export default function RefrigeratorPage() {
 
       {error && <div className="text-[var(--color-danger)] bg-[var(--color-danger-soft)] p-4 rounded-2xl border border-[var(--color-danger)]/30 text-center text-sm">{error}</div>}
 
-      {notice && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none">
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
-          <div
-            aria-live="polite"
-            className={`toast-pop relative pointer-events-auto w-[min(90vw,420px)] rounded-[28px] border p-6 text-center shadow-[0_24px_80px_rgba(15,23,42,0.22)] ${
-              notice.type === 'success'
-                ? 'bg-[var(--color-surface)] border-[var(--color-success)]/30 text-[var(--color-text)]'
-                : 'bg-[var(--color-surface)] border-[var(--color-danger)]/30 text-[var(--color-text)]'
-            }`}
-          >
-            <div className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${
-              notice.type === 'success' ? 'bg-[var(--color-success-soft)] text-[var(--color-success)]' : 'bg-[var(--color-danger-soft)] text-[var(--color-danger)]'
-            }`}>
-              {notice.type === 'success' ? (
-                <CheckCircle2 className="h-8 w-8" />
-              ) : (
-                <AlertCircle className="h-8 w-8" />
-              )}
-            </div>
-            <h3 className="text-xl font-bold font-serif text-[var(--color-text)] mb-2">
-              {notice.type === 'success' ? 'Success!' : 'Oops!'}
-            </h3>
-            <p className="text-sm leading-6 text-[var(--color-text-muted)]">{notice.message}</p>
-          </div>
-        </div>
-      )}
-
       {loading && !ingredients.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
@@ -167,7 +156,7 @@ export default function RefrigeratorPage() {
                 ingredient={ing}
                 index={idx}
                 onEdit={() => setModalState({ isOpen: true, ingredient: ing })}
-                onDelete={handleDelete}
+                onDelete={() => handleDelete(ing.id || ing._id, ing.name)}
               />
             </ScrollReveal>
           ))}

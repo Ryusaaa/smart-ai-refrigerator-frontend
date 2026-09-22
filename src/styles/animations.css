@@ -63,7 +63,6 @@
   animation: recipe-skeleton-sweep 1.6s linear infinite;
 }
 
-/* Progress bar indeterminate */
 @keyframes recipe-loading-slide {
   0% { transform: translateX(-120%); }
   100% { transform: translateX(320%); }
@@ -89,7 +88,6 @@
   animation: recipe-loading-slide 1.4s ease-in-out infinite;
 }
 
-/* Ikon topi chef bergoyang pelan */
 @keyframes recipe-icon-bob {
   0%, 100% { transform: translateY(0) rotate(-4deg); }
   50% { transform: translateY(-3px) rotate(4deg); }
@@ -99,7 +97,6 @@
   animation: recipe-icon-bob 1.6s ease-in-out infinite;
 }
 
-/* Ikon sparkles berkedip */
 @keyframes recipe-twinkle {
   0%, 100% { opacity: 0.35; transform: scale(0.85); }
   50% { opacity: 1; transform: scale(1.15); }
@@ -109,33 +106,61 @@
   animation: recipe-twinkle 1.4s ease-in-out infinite;
 }
 
-/* Teks status & kartu resep muncul halus */
 @keyframes recipe-fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes toast-pop-in {
-  0% {
-    opacity: 0;
-    transform: translateY(-12px) scale(0.96) translateX(18px);
-  }
-  68% {
-    opacity: 1;
-    transform: translateY(2px) scale(1.02) translateX(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) translateX(0);
-  }
 }
 
 .animate-recipe-fade-in {
   animation: recipe-fade-in 0.3s ease-out both;
 }
 
-.toast-pop {
-  animation: toast-pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+@keyframes toast-slide-in {
+  0% { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  60% { opacity: 1; transform: translateY(2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-slide-out {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.97); }
+}
+
+@keyframes toast-progress-shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.toast-stack {
+  width: min(92vw, 380px);
+}
+
+.toast-item {
+  will-change: transform, opacity;
+}
+
+.toast-enter {
+  animation: toast-slide-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.toast-leave {
+  animation: toast-slide-out 0.2s ease-in both;
+  pointer-events: none;
+}
+
+.toast-progress-track {
+  height: 3px;
+  width: 100%;
+  background: var(--color-border);
+  opacity: 0.5;
+}
+
+.toast-progress-bar {
+  height: 100%;
+  width: 100%;
+  animation-name: toast-progress-shrink;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -143,12 +168,15 @@
   .recipe-loading-bar::after,
   .animate-recipe-icon-bob,
   .animate-recipe-twinkle,
-  .animate-recipe-fade-in {
+  .animate-recipe-fade-in,
+  .toast-enter,
+  .toast-leave,
+  .toast-progress-bar {
     animation: none;
   }
 }
 
-sidebar-stagger-item {
+.sidebar-stagger-item {
   opacity: 0;
   transform: translateX(-14px);
   transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
